@@ -1,0 +1,38 @@
+.page_cus_container{
+    padding: 20px 45px;
+    max-width: 1349px;
+    margin: 0 auto;
+
+}
+.page_customer{
+    padding-right: 45px;
+    padding-left: 45px;
+    max-width: 1349px;
+    margin: 0 auto;
+    gap: 20px;
+}
+.page_customer .page_title h1{
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.page_customer .page_name p{
+    margin: 0 0 15px 0;
+    font-size: 14px;
+}
+.block_account .block_title h2{
+    font-size: 19px;
+    font-weight: 400;
+    color: #212B25;
+    margin-bottom: 7px;
+    margin-top: 0;
+    text-transform: uppercase;
+}
+.block_content p{
+    margin-bottom: 5px;
+}
+.block_account svg{
+    color: #e95221;
+    margin-right: 5px;
+}

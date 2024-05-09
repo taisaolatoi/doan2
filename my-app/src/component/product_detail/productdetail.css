@@ -1,0 +1,73 @@
+.container .product_img_detail{
+    padding-bottom: 130%;
+    display: block;
+    height: 0;
+    width: 380px;
+}
+.container .product_img_detail img{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 380px;
+    position: absolute;
+}
+.detail_desc .title_product{
+    font-size: 26px;
+    margin: 0px 0px 5px;
+    line-height: 36px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.detail_desc .product_top_clearfix{
+    margin-bottom: 5px;
+}
+.detail_desc .inventory_quantity{
+    margin-bottom: 5px;
+    display: flex;
+}
+.detail_desc .pricebox_clearfix{
+    border-bottom: 1px solid #DDE1EF;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.detail_desc .pricebox_clearfix .special_price{
+    font-size: 22px;
+    font-weight: bold;
+    color: #e8002d;
+}
+.detail_desc .pricebox_clearfix .old_price{
+    color: #acacac;
+    font-size: 16px;
+}
+.detail_desc .product_discount{
+    position: relative;
+    background: #fff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px dashed #E95221;
+    background: rgba(1, 86, 127, 0.02);
+    border-style: dotted;
+}
+.product_discount legend{
+    width: auto;
+    color: #E95221;
+    font-weight: 600;
+    background: rgba(1, 86, 127, 0.02);
+    border-radius: 5px;
+    border: 1px solid;
+    font-size: 16px;
+    margin-bottom: 0px;
+    padding: 0px 10px;
+}
+.product_discount legend img{
+    max-width: 23px;
+    mix-blend-mode: multiply;
+    vertical-align: -3px;
+}
+.product_discount .product_promotion_list p{
+    margin-bottom: 5px;
+}

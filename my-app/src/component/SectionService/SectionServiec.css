@@ -1,0 +1,29 @@
+.Sectionsv{
+    margin-top: 30px;
+    padding: 0 120px;
+}
+.promo-item{
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    height: 60px;
+    width: 300px;
+    padding: 10px 20px;
+    justify-content: center;
+    color: #ec5211;
+}
+.container{
+    justify-content: space-around;
+}
+.icon{
+    margin-right: 10px;
+}
+.info{
+    font-size: 14px;
+    line-height: 20px;
+}
+.info span{
+    font-weight: 600;
+    color: #E95211;
+}
