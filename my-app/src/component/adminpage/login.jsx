@@ -85,7 +85,7 @@ const Login = () => {
                         onKeyPress={(event) => handlePressEnter(event)}
                     />
                     <div className="btn-regis">
-                        <button onClick={() => handleLogin()} type='button'>Đăng Nhập
+                        <button onClick={() => handleLogin()} type='button'>Đăng Nhậ
                         </button>
                     </div>
                 </div>
