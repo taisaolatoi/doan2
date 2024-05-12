@@ -2,19 +2,15 @@ import React, { useState } from 'react';
 import SectionNewProduct from '../SectionNewProduct/SectionNewProduct';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Button, Modal, message  } from 'antd';
-
-const setSuccessModalVisible = (visible) => {
-    setSuccessModalVisible(visible);
-};
+import { Button, Modal, message } from 'antd';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [successModalVisible, setSuccessModalVisible] = useState(false);
 
-
     const navigate = useNavigate();
+
     const handleUsername = (event) => {
         setUsername(event.target.value);
     };
@@ -30,8 +26,6 @@ const Login = () => {
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
-
-
 
     const handleLogin = () => {
         const data = {
@@ -50,8 +44,16 @@ const Login = () => {
             .then(response => response.json())
             .then(responseData => {
                 if (responseData.success) {
-                    localStorage.setItem('client', responseData.name);
-                    setSuccessModalVisible(true); // Hiển thị Modal
+                    if (responseData.role === 'admin') {
+                        localStorage.setItem('admin', responseData.name);
+                        setSuccessModalVisible(true);
+                        navigate('/admin');
+                    } else {
+                        localStorage.setItem('client', responseData.name);
+                        setSuccessModalVisible(true);
+                        navigate('/');
+                    }
+
                 } else {
                     alert(responseData.message);
                 }
@@ -70,7 +72,6 @@ const Login = () => {
 
     const handleModalOk = () => {
         setSuccessModalVisible(false);
-        navigate('/');
         window.location.reload();
     };
 

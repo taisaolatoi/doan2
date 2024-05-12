@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import React from "react";
 import axios from 'axios';
 import {useParams} from 'react-router-dom';
-import ProductDetail from '../../component/product_detail/productdetail';
+import ProductDetail from '../../../component/product_detail/productdetail';
 
 const ProductPage = () => {
   const { id } = useParams();

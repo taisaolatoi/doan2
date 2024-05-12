@@ -22,7 +22,7 @@ const Navbar = () => {
           <NavLink to="/">SALE OFF</NavLink>
         </li>
         <li>
-          <NavLink to="/">TIN TỨC</NavLink>
+          <NavLink to="/test">TIN TỨC</NavLink>
         </li>
         <li>
           <NavLink to="/">CHÍNH SÁCH NHƯỢNG QUYỀN</NavLink>
