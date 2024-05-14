@@ -33,7 +33,7 @@ const Login = () => {
         };
 
         // Send a POST request to the PHP server to handle the login
-        fetch('http://localhost/reactt/phpbackend/login.php', {
+        fetch('http://localhost/doan2/phpbackend/login.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,11 +44,11 @@ const Login = () => {
             .then(responseData => {
                 if (responseData.success) {
                     if (responseData.role === 'admin') {
-                        localStorage.setItem('admin', responseData.name);
+                        localStorage.setItem('admin', responseData.id);
                         navigate('/admin');
 
                     } else {
-                        localStorage.setItem('client', responseData.name);
+                        localStorage.setItem('client', responseData.id);
                         navigate('/');
                         window.location.reload();
                     }
@@ -80,7 +80,7 @@ const Login = () => {
                         onKeyPress={(event) => handlePressEnter(event)}
                     />
                     <div className="btn-regis">
-                        <button onClick={() => handleLogin()} type='button'>Đăng Nhậ
+                        <button onClick={() => handleLogin()} type='button'>Đăng Nhập
                         </button>
                     </div>
                 </div>

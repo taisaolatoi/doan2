@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 import { UserOutlined, PhoneOutlined, PaperClipOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './profile.css';
 
 const Profile = () => {
-    const [username, setUsername] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const storedUsername = localStorage.getItem('client');
-        if (storedUsername) {
-            setUsername(storedUsername);
+        const client = localStorage.getItem('client');
+        if (!client) {
+            navigate('/login');
         }
     }, []);
 
@@ -24,7 +26,7 @@ const Profile = () => {
                     <div className="page_name">
                         <p>
                             <i>Xin chào, </i>
-                            <b style={{ color: "#E95221" }}>{username}</b>
+                            <b style={{ color: "#E95221" }}></b>
                         </p>
                     </div>
                 </div>
@@ -37,7 +39,7 @@ const Profile = () => {
                             <p>
                                 <UserOutlined />
                                 <b>Họ tên: </b>
-                                {username}
+                                
                             </p>
                             <p>
                                 <PhoneOutlined />

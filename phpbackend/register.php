@@ -2,8 +2,7 @@
 require 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    $_POST = json_decode(file_get_contents('php://input'), true);
+  $_POST = json_decode(file_get_contents('php://input'), true);
 
   // Lấy dữ liệu từ biểu mẫu đăng ký
   $username = $_POST['username'];
@@ -12,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $phone = $_POST['phone'];
   $password = $_POST['password'];
   $repassword = $_POST['repassword'];
-  
+
+  // Kiểm tra xem tên người dùng đã tồn tại hay chưa
   $query1 = "SELECT username FROM account WHERE username = '$username'";
   $result1 = pg_query($conn, $query1);
 
@@ -21,19 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } elseif ($password !== $repassword) {
     echo 'Mật khẩu không khớp!';
   } else {
-    $query2 = "INSERT INTO account (username, password, name, phone, email) VALUES ('$username', '$password', '$name', '$phone', '$email')";
+    $hashedPassword = pg_escape_literal(password_hash($password, PASSWORD_DEFAULT));
+    $query2 = "INSERT INTO account (username, password, name, phone, email) VALUES ('$username', '$hashedPassword', '$name', '$phone', '$email')";
     $result2 = pg_query($conn, $query2);
-    
+
     if ($result2) {
       $data = array('success' => true, 'username' => $username, 'message' => 'Đăng ký thành công');
       echo json_encode($data);
     } else {
-      echo 'Đăng ký thành công!';
-            // echo '<script>';
-            // echo 'setTimeout(function() {';
-            // echo 'alert("Đăng nhập/Đăng ký thành công!");';
-            // echo '}, 4000);';
-            // echo '</script>';
+      echo 'Đăng ký thất bại!';
     }
   }
 }

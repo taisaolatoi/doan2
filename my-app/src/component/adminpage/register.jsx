@@ -51,7 +51,7 @@ const Register = () => {
             setPassword('');
             setRepassword('');
             setSuccessModalVisible(false); // Ẩn Modal
-          }, 4000);
+          }, 2000);
         } else {
           console.error(result.message);
         }

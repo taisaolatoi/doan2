@@ -3,6 +3,16 @@
     margin: 0 auto;
     padding: 20px 45px;
 }
+.page_edit_profile .btn_info{
+    width: 160px;
+}
+.page_edit_profile .login-regist-form .input-form{
+    width: 800px;
+}
+.page_edit_profile .login-regist-form{
+    width: 800px;
+    box-shadow: none;
+}
 .form_info_profile .btn_info p{
     margin-top: 20px;
     text-align: center;
@@ -27,11 +37,12 @@
     background-color: #fff;
     color: #E95221;
 }
-.form_info_profile .title_head{
+.page_edit_profile .title_head{
     font-size: 19px;
     line-height: 22px;
     font-weight: 400;
     color: #212B25;
     text-transform: uppercase;
-    margin-bottom: 27px;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
