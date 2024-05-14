@@ -18,6 +18,9 @@ const Adminroute = () => {
                 <Route path="/" element={<div>
                     hahahaha
                 </div>} />
+                <Route path="/" element={<div>
+                    hahahaha
+                </div>} />
             </Routes>
             <Footer/>
         </>

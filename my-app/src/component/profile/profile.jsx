@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
-import { UserOutlined, PhoneOutlined } from '@ant-design/icons'
+import { UserOutlined, PhoneOutlined, PaperClipOutlined } from '@ant-design/icons'
+import { NavLink } from 'react-router-dom';
 import './profile.css';
 
 const Profile = () => {
@@ -41,14 +42,47 @@ const Profile = () => {
                             <p>
                                 <PhoneOutlined />
                                 <b>Số ĐT: </b>
-                                
+
                             </p>
-                            <p></p>
+                            <p>
+                                <PaperClipOutlined />
+                                <b>Địa chỉ: </b>
+                            </p>
+
+                        <div className="edit_profile">
+                            <NavLink to="/edit_profile">
+                                <p>Sửa thông tin</p>
+                            </NavLink>
+                        </div>
 
                         </div>
                     </Col>
                     <Col span={17}>
-                        hello
+                        <h1 className='title_table'>Đơn hàng của bạn</h1>
+                        <div className="my_order">
+                            <div className="dashboard">
+                                <div className="recent_orders">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Đơn hàng</th>
+                                                <th>Ngày</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Giá trị</th>
+                                                <th>Tình trạng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colSpan={5}>
+                                                    <p>Không có đơn hàng nào</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </Col>
                 </Row>
 
@@ -57,4 +91,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default Profile; 

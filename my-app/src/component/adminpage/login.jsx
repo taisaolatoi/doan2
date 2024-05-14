@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import SectionNewProduct from '../SectionNewProduct/SectionNewProduct';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Button, Modal, message } from 'antd';
+import { message } from 'antd';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [successModalVisible, setSuccessModalVisible] = useState(false);
 
     const navigate = useNavigate();
 
@@ -46,12 +45,12 @@ const Login = () => {
                 if (responseData.success) {
                     if (responseData.role === 'admin') {
                         localStorage.setItem('admin', responseData.name);
-                        setSuccessModalVisible(true);
                         navigate('/admin');
+
                     } else {
                         localStorage.setItem('client', responseData.name);
-                        setSuccessModalVisible(true);
                         navigate('/');
+                        window.location.reload();
                     }
 
                 } else {
@@ -70,11 +69,6 @@ const Login = () => {
         }
     };
 
-    const handleModalOk = () => {
-        setSuccessModalVisible(false);
-        window.location.reload();
-    };
-
     return (
         <div className="login-regist-form">
             <SectionNewProduct textbaner='ĐĂNG NHẬP' />
@@ -91,16 +85,6 @@ const Login = () => {
                     </div>
                 </div>
             </form>
-            <Modal
-                visible={successModalVisible}
-                title="Thông báo"
-                onCancel={() => setSuccessModalVisible(false)}
-                footer={[
-                    <Button key="ok" onClick={() => handleModalOk()}>OK</Button>,
-                ]}
-            >
-                <p>Đăng nhập thành công!</p>
-            </Modal>
         </div>
     );
 };

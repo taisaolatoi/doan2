@@ -1,0 +1,37 @@
+.page_edit_profile {
+    max-width: 1349px;
+    margin: 0 auto;
+    padding: 20px 45px;
+}
+.form_info_profile .btn_info p{
+    margin-top: 20px;
+    text-align: center;
+    width: 155px;
+    background: #E95221;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: .3s;
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -ms-transition: .3s;
+    -o-transition: .3s;
+    text-transform: uppercase;
+    border: 1px solid #E95221;
+    line-height: 42px;
+    height: 45px;
+    padding: 0px 50px;
+}
+
+.form_info_profile .btn_info:hover p{
+    background-color: #fff;
+    color: #E95221;
+}
+.form_info_profile .title_head{
+    font-size: 19px;
+    line-height: 22px;
+    font-weight: 400;
+    color: #212B25;
+    text-transform: uppercase;
+    margin-bottom: 27px;
+}
