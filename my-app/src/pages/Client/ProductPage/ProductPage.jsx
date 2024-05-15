@@ -72,7 +72,11 @@ const ProductPage = () => {
                 <ul id="sortby">
                   <li>
                     <span>Mặc định</span>
-                    <ul></ul>
+                    <ul>
+                      <li>Giá tăng dần</li>
+                      <li>Giá giảm dần</li>
+                      <li>Hàng mới nhất</li>
+                    </ul>
                   </li>
                 </ul>
               </div>

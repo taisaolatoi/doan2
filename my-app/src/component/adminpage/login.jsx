@@ -3,12 +3,18 @@ import SectionNewProduct from '../SectionNewProduct/SectionNewProduct';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { message } from 'antd';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handleUsername = (event) => {
         setUsername(event.target.value);
@@ -52,9 +58,10 @@ const Login = () => {
                         navigate('/');
                         window.location.reload();
                     }
-
                 } else {
-                    alert(responseData.message);
+                    toast.error(responseData.message, {
+                        position: 'top-left'
+                      });
                 }
             })
             .catch(error => {
@@ -71,6 +78,7 @@ const Login = () => {
 
     return (
         <div className="login-regist-form">
+            <ToastContainer />
             <SectionNewProduct textbaner='ĐĂNG NHẬP' />
             <form action="" method='post'>
                 <div style={{ marginTop: '15px', gap: '10px' }} className="input-form">

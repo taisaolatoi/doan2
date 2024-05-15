@@ -68,6 +68,17 @@
     font-size: 14px;
     font-weight: 500;
 }
+/* #sort-by ul{
+    position: absolute;
+    display: none;
+    right: -6px;
+    top: 35px;
+    background: none repeat scroll 0 0 #F8F8F8;
+    z-index: 10000;
+    border-top: none;
+    border: 1px #e1e1e1 solid;
+    width: 170px;
+} */
 
 .bodywrap {
     padding-right: 45px;

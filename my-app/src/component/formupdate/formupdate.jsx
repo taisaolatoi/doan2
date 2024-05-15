@@ -38,19 +38,22 @@ const Formupdate = () => {
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    // Hiển thị toast thông báo cập nhật thành công
-                    toast.success('Thông tin đã được cập nhật thành công!', {
-                        position: toast.POSITION.TOP_CENTER,
+                    toast.success(result.message, {
+                        position: 'top-left',
                         autoClose: 2000,
+                        onClose: () => {
+                            setEmail('');
+                            setFullName('');
+                            setPhoneNumber('');
+                            setGender('');
+                            setBirthdate('');
+                        }
                     });
-                    // Đặt lại giá trị của các trường sau khi gửi thành công
-                    setEmail('');
-                    setFullName('');
-                    setPhoneNumber('');
-                    setGender('');
-                    setBirthdate('');
+
                 } else {
-                    console.error(result.message);
+                    toast.error(result.message, {
+                        position: 'top-left',     
+                });
                 }
             })
             .catch(error => {
