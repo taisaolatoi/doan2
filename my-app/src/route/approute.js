@@ -9,6 +9,8 @@ import Login from '../component/adminpage/login';
 import ProductDetail from '../component/product_detail/productdetail'
 import Profile from '../component/profile/profile'
 import Editprofile from '../component/edit_profile/editprofile';
+import Cart from '../component/cart/cart';
+import Search from '../component/search/search';
 
 const Approute = () => {
     return (
@@ -42,6 +44,13 @@ const Approute = () => {
                 <Route path="/edit_profile" element={<div>
                     <Editprofile />
                 </div>} />
+                <Route path="/cart" element={<div>
+                    <Cart/>
+                </div>} />
+                <Route path="/search" element={<div>
+                    <Search/>
+                </div>} />
+                
 
             </Routes>
             <Footer/>

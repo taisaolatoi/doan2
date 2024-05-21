@@ -29,7 +29,7 @@ const Register = () => {
       repassword,
     };
 
-    fetch('http://localhost/reactt/phpbackend/register.php', {
+    fetch('http://localhost/doan2/phpbackend/register.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

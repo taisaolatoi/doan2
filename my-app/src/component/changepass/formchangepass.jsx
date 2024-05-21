@@ -74,11 +74,11 @@ const Formchangepass = () => {
       <form onSubmit={handleSubmit} method='post'>
         <div style={{ marginTop: '15px', gap: '10px' }} className="input-form">
           <label style={{ fontWeight: 'bold' }} htmlFor="">Mật khẩu hiện tại: </label>
-          <input type="password" placeholder='Mật khẩu hiện tại (*)' value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+          <input type="password" placeholder='Mật khẩu hiện tại (*)' value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required />
           <label style={{ fontWeight: 'bold' }} htmlFor="">Mật khẩu mới:</label>
-          <input type="password" placeholder='Mật khẩu mới (*)' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+          <input type="password" placeholder='Mật khẩu mới (*)' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
           <label style={{ fontWeight: 'bold' }} htmlFor="">Nhập lại mật khẩu mới:</label>
-          <input type="password" placeholder='Nhập lại mật khẩu mới (*)' value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} />
+          <input type="password" placeholder='Nhập lại mật khẩu mới (*)' value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} required />
           <div className="btn-regis">
             <button type='submit'>Đổi mật khẩu</button>
           </div>

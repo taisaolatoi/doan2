@@ -1,4 +1,4 @@
-<?php 
+<?php
 require 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -10,12 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     sanpham.*,
     thuonghieu.tenthuonghieu,
     loaisanpham.tenloai,
-    ctloai.tenctloai
+    ctloai.tenctloai,
+    size.namesize,
+    size_sanpham.soluong
 FROM
     sanpham
     JOIN thuonghieu ON sanpham.idthuonghieu = thuonghieu.idthuonghieu
     JOIN loaisanpham ON sanpham.idloai = loaisanpham.idloai
-    JOIN ctloai on sanpham.idctloai = ctloai.idctloai
+    JOIN ctloai ON sanpham.idctloai = ctloai.idctloai
+    JOIN size_sanpham ON size_sanpham.idsanpham = sanpham.idsanpham
+    JOIN size ON size.id = size_sanpham.idsize
 WHERE
     sanpham.idsanpham = $1";
     $result = pg_prepare($conn, "get_product", $query);

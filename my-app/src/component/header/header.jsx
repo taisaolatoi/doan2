@@ -21,11 +21,11 @@ import { LogoutOutlined } from '@ant-design/icons'
 const HeaderComponent = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+
   useEffect(() => {
     const client = localStorage.getItem('client');
     if (client) {
-      setIsLoggedIn(true); 
+      setIsLoggedIn(true);
     }
   }, [isLoggedIn]);
 
@@ -41,7 +41,7 @@ const HeaderComponent = () => {
         <Col className='Search' span={14}>
           <ButtonInputSearch
             size='large'
-            placeholder='Input Search Text'
+            placeholder='Nhập tên sản phẩm...'
             textbutton='Tìm kiếm'
           />
 
@@ -125,7 +125,9 @@ const HeaderComponent = () => {
               <span className='Circle'>
                 <ShoppingCartOutlined />
               </span>
-              <span>GIỎ HÀNG</span>
+              <NavLink to="/cart">
+                <span>GIỎ HÀNG</span>
+              </NavLink>
             </Button>
           </div>
         </Col>

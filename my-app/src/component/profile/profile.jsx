@@ -7,14 +7,38 @@ import './profile.css';
 
 const Profile = () => {
 
+    // const [userId, setUserId] = useState('');
     const navigate = useNavigate();
+
+    const [customerInfo, setCustomerInfo] = useState({});
 
     useEffect(() => {
         const client = localStorage.getItem('client');
+        // setUserId(client); // Gán giá trị client cho userId
+    
         if (!client) {
             navigate('/login');
+        } else {
+            fetch('http://localhost/doan2/phpbackend/getin4_user.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: client }), // Gửi giá trị client cho backend
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        setCustomerInfo(result.data);
+                    } else {
+                        console.error(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
-    }, []);
+    }, [navigate]);
 
     return (
         <>
@@ -26,7 +50,7 @@ const Profile = () => {
                     <div className="page_name">
                         <p>
                             <i>Xin chào, </i>
-                            <b style={{ color: "#E95221" }}></b>
+                            <b style={{ color: "#E95221" }}>{customerInfo.name}</b>
                         </p>
                     </div>
                 </div>
@@ -36,21 +60,21 @@ const Profile = () => {
                             <h2 className="widget_title">Thông tin khách hàng</h2>
                         </div>
                         <div className="block_content">
-                            <p>
+                        <p>
                                 <UserOutlined />
                                 <b>Họ tên: </b>
-                                
+                                {customerInfo.name}
                             </p>
                             <p>
                                 <PhoneOutlined />
                                 <b>Số ĐT: </b>
-
+                                {customerInfo.phone}
                             </p>
                             <p>
                                 <PaperClipOutlined />
                                 <b>Địa chỉ: </b>
+                                {customerInfo.address}
                             </p>
-
                         <div className="edit_profile">
                             <NavLink to="/edit_profile">
                                 <p>Sửa thông tin</p>

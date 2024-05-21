@@ -13,6 +13,9 @@
 .container-bread-crumb ul li {
     list-style: none;
 }
+.container-bread-crumb ul a p {
+    color:#000;
+}
 
 .container-bread-crumb ul {
     margin: 0;
@@ -57,19 +60,36 @@
 
 #sort-by {
     display: flex;
-    gap: 5px;
+    gap: 10px;
+    padding-right: 30px;
 }
 
 #sort-by li {
     list-style: none;
 }
-
+#sort-by svg{
+    color: #568faa;
+}
 #sort-by li span {
     font-size: 14px;
     font-weight: 500;
 }
-/* #sort-by ul{
+#sort-by li li:hover{
+    background-color: #E95221;
+    color: #fff;
+}
+#sort-by li li{
+    padding: 5px;
+    font-weight: lighter;
+}
+#sortby:hover .sortby_subnav {
+    display: block;
+}
+#sort-by .sortby_subnav{
+    cursor: pointer;
     position: absolute;
+    top: 12%;
+    right: -3%;
     display: none;
     right: -6px;
     top: 35px;
@@ -78,7 +98,7 @@
     border-top: none;
     border: 1px #e1e1e1 solid;
     width: 170px;
-} */
+}
 
 .bodywrap {
     padding-right: 45px;

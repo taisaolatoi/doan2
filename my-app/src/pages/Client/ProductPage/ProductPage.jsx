@@ -1,11 +1,11 @@
 import { Col, Row } from 'antd';
 import './ProductPage.css';
-import { RightOutlined } from '@ant-design/icons';
+import { RightOutlined, DownCircleOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import React from "react";
 import axios from 'axios';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ProductDetail from '../../../component/product_detail/productdetail';
 
 const ProductPage = () => {
@@ -13,21 +13,25 @@ const ProductPage = () => {
 
   const [data, setData] = useState([]);
   const [firstItem, setFirstItem] = useState([]);
-  useEffect(() => {
-    axios.get(`http://localhost/reactt/phpbackend/getproduct.php?id=${id}`)
-      .then(response => {
-        setData(response.data);
-        setFirstItem(response.data[0]);
-
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [id]);
+  const [sortBy, setSortBy] = useState('default');
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    // Hàm lấy sản phẩm và sắp xếp
+    const fetchProducts = (sortType = '') => {
+      axios.get(`http://localhost/doan2/phpbackend/getproduct.php?id=${id}&sort=${sortType}`)
+        .then(response => {
+          setData(response.data);
+          if (response.data.length > 0) {
+            setFirstItem(response.data[0]);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    };
+
+    fetchProducts(sortBy);
+  }, [id, sortBy]);
 
   return (
     <>
@@ -46,7 +50,7 @@ const ProductPage = () => {
             <RightOutlined />
             <li>
               <p>{firstItem.tenctloai}</p>
-            </li>  
+            </li>
           </ul>
         </div>
       </div>
@@ -71,11 +75,13 @@ const ProductPage = () => {
                 </label>
                 <ul id="sortby">
                   <li>
-                    <span>Mặc định</span>
-                    <ul>
-                      <li>Giá tăng dần</li>
-                      <li>Giá giảm dần</li>
-                      <li>Hàng mới nhất</li>
+                    <span style={{ cursor: 'pointer', paddingRight: '5px' }}>Mặc định
+                    </span>
+                    <DownCircleOutlined />
+                    <ul className='sortby_subnav'>
+                      <li onClick={() => setSortBy('priceAsc')}>Giá tăng dần</li>
+                      <li onClick={() => setSortBy('priceDesc')}>Giá giảm dần</li>
+                      <li onClick={() => setSortBy('newest')}>Hàng mới nhất</li>
                     </ul>
                   </li>
                 </ul>
@@ -85,9 +91,9 @@ const ProductPage = () => {
 
           <div className="product-view">
             <Row>
-            {data && Array.isArray(data) && data.length > 0 ? (
+              {data && Array.isArray(data) && data.length > 0 ? (
                 data.map((itemData, index) => {
-                    //chuyển gia tu string sang float
+                  //chuyển gia tu string sang float
                   const formattedPrice = parseFloat(itemData.giasanpham);
                   return (
                     <Col style={{ paddingLeft: '10px', paddingRight: '10px' }} span={6} key={index}>
@@ -98,13 +104,13 @@ const ProductPage = () => {
                       </div>
                       <div className="product_info">
                         <h3 className="product_name">
-                       <NavLink to={`/product_detail/${itemData.idsanpham}`}>{itemData.tensanpham}</NavLink>
+                          <NavLink to={`/product_detail/${itemData.idsanpham}`}>{itemData.tensanpham}</NavLink>
                         </h3>
-                        
+
                         <div className="price_box">
-                            {/* chuyển đổi giá sang số thập phân */}
+                          {/* chuyển đổi giá sang số thập phân */}
                           <span className="price">{formattedPrice.toLocaleString()}đ</span>
-                          
+
                         </div>
                       </div>
                     </Col>

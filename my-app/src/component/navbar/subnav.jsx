@@ -9,7 +9,7 @@ const Subnav = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost/reactt/phpbackend/getctloai.php')
+    axios.get('http://localhost/doan2/phpbackend/getctloai.php')
       .then(response => {
         setData(response.data);
       })

@@ -11,10 +11,10 @@ const ProductDetail = () => {
     const [product, setProduct] = useState();
   
     useEffect(() => {
-      axios.get(`http://localhost/reactt/phpbackend/getoneproduct.php?id=${id}`)
+      axios.get(`http://localhost/doan2/phpbackend/getoneproduct.php?id=${id}`)
         .then(res => {
-            console.log(res);
           setProduct(res.data[0]);
+          console.log(res);
         })
         .catch(error => {
           console.log(error);

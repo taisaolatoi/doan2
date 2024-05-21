@@ -1,10 +1,110 @@
 import { NavLink } from "react-router-dom";
-import { RightOutlined } from "@ant-design/icons";
+import { RightOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { Col, Row } from 'antd'
+import { useState, useEffect } from "react";
 const ProductInfo = ({ product }) => {
+    const [name] = useState(product.tensanpham);
+    const [price] = useState(product.giasanpham);
+    const [img] = useState(product.hinhanh);
+    const [id] = useState(product.idsanpham);
+    const [quantity, setQuantity] = useState(1);
+    const [userId, setUserId] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    // Các state và hàm xử lý sự kiện khác
+
+
+
+    const handleAddToCart = () => {
+        // Xử lý logic khi ấn vào nút "Thêm vào giỏ hàng"
+        if (userId) {
+            setShowModal(true); // Hiển thị modal khi thêm vào giỏ hàng thành công
+
+        } else {
+            setShowModal(false);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false); // Ẩn modal khi nhấn vào nút đóng hoặc bất kỳ vị trí nào ngoài modal
+    };
+
+    useEffect(() => {
+        const Id = localStorage.getItem('client');
+        setUserId(Id);
+    }, []);
+    // console.log(userId)
+
     const formattedPrice = parseFloat(product.giasanpham);
     const formattedOldPrice = parseFloat(product.giacu);
     const isAvailable = product.soluong > 0;
+
+    const isProductWithSize = ["Áo Cầu Lông", "Quần Cầu Lông", "Váy Cầu Lông", "Giày Cầu Lông"].includes(product.tenloai);
+
+
+
+    const handleDecreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+    const handleIncreaseQuantity = () => {
+        setQuantity(quantity + 1);
+    };
+
+    // useEffect(() => {
+    //     const Id = localStorage.getItem('client');
+
+    //     fetch(`http://localhost/doan2/phpbackend/getin4product.php?id=${del}`, {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({ userId: Id }),
+    //     })
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         setData(data.data);
+    //       })
+    //       .catch(error => {
+    //         console.error(error);
+    //       });
+    //   }, []);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Send registration data to PHP backend for processing
+        const data = {
+            userId,
+            name,
+            price,
+            img,
+            id,
+            quantity,
+        };
+
+        fetch('http://localhost/doan2/phpbackend/cart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result); // Log the server response
+                if (result.success) {
+                    console.success(result.message);
+                } else {
+                    console.error(result.message);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
+
+
+
     return (
         <>
             <div className="bread-crumb">
@@ -20,7 +120,7 @@ const ProductInfo = ({ product }) => {
 
                         <RightOutlined />
 
-                        <li style={{textTransform: 'capitalize'}}><p>{product.tenctloai}</p></li>
+                        <li style={{ textTransform: 'capitalize' }}><p>{product.tenctloai}</p></li>
 
                         <RightOutlined />
 
@@ -60,8 +160,14 @@ const ProductInfo = ({ product }) => {
                                 </div>
                             </div>
 
-
                             <form action="" method="post">
+                                <input type="hidden" name="userId" value={userId} />
+                                <input type="hidden" name="idsanpham" value={product.idsanpham} />
+                                <input type="hidden" name="hinhanh" value={product.hinhanh} />
+                                <input type="hidden" name="soluong" value={product.soluong} />
+                                <input type="hidden" name="tensanpham" value={product.tensanpham} />
+                                <input type="hidden" name="giasanpham" value={product.giasanpham} />
+
                                 <div className="pricebox_clearfix">
                                     <div className="special_price">
                                         <span>{formattedPrice.toLocaleString()}₫</span>
@@ -69,7 +175,7 @@ const ProductInfo = ({ product }) => {
                                     <div className="old_price">
                                         Giá niêm yết:&nbsp;
                                         <del>{formattedOldPrice.toLocaleString()}₫</del>
-                                        
+
                                     </div>
                                 </div>
 
@@ -87,21 +193,88 @@ const ProductInfo = ({ product }) => {
                                         <p>✔ Tặng 1 đôi vớ cầu lông VNB &#40; vớ <span>VNB nhiều màu </span> hoặc vớ <span> VNB ngắn &#41;</span></p>
                                     </div>
                                 </fieldset>
+                                <div className="form-product">
+                                    <div className="select_size">
+                                        {isProductWithSize && (
+                                            <div style={{ marginBottom: '15px' }} className="size_clearfix">
+                                                <p>Chọn size:</p>
+                                                <div className="group_size">
+                                                    <div className="select_size_input">
+                                                        <input type="radio" id="sizeS" name="size" value="S" />
+                                                        <label htmlFor="sizeS">S</label>
+                                                    </div>
+                                                    <div className="select_size_input">
+                                                        <input type="radio" id="sizeM" name="size" value="M" />
+                                                        <label htmlFor="sizeM">M</label>
+                                                    </div>
+                                                    <div className="select_size_input">
+                                                        <input type="radio" id="sizeL" name="size" value="L" />
+                                                        <label htmlFor="sizeL">L</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <div className="input_number_product">
+                                            <button type="button" className="decrease-btn" onClick={handleDecreaseQuantity}>-</button>
+                                            <input
+                                                style={{ width: '100px', textAlign: 'center' }}
+                                                className="quantity-input"
+                                                type="text"
+                                                value={quantity}
+                                                maxLength="2"
+                                                min="1"
+                                                onChange={(e) => setQuantity(e.target.value)}
+                                            />
+                                            <button type="button" className="increase-btn" onClick={handleIncreaseQuantity}>+</button>
+                                        </div>
+                                        <div style={{ marginTop: '20px', width: '300px' }} className="bot_form">
+                                            <div onClick={handleAddToCart} className="btn-regis">
+                                                    <button onClick={handleSubmit} type="submit">Thêm vào giỏ hàng</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
-                            <div className="select_size">
-                                <div className="size_clearfix">
-                                    <p>Chọn size:</p>
-                                </div>
-                            </div>
-                            <div className="boz_form">
-                                <div className="form_group">
-                                    <div className="flex_quantity"></div>
-                                </div>
-                            </div>
                         </div>
                     </Col>
                 </Row>
             </div>
+
+
+            {showModal && (
+                <div className="container_popup">
+                    <div className={`header_popcart ${showModal ? 'show' : 'hide'}`}>
+                        <div className="topcart_header">
+                            <span>
+                                <CheckCircleOutlined />
+                                Thêm sản phẩm vào giỏ hàng thành công
+                            </span>
+                        </div>
+                        <div className="media_content">
+                            <div style={{ width: '100px' }} className="thump">
+                                <img style={{ width: '100%', height: '100%' }} src={product.hinhanh} alt="" />
+                            </div>
+                            <div style={{ paddingLeft: '15px' }} className="body_content">
+                                <h4 style={{ fontSize: '14px' }} className="title_product">{product.tensanpham}</h4>
+                                <div className="product_new_price">
+                                    <b style={{ marginRight: '15px' }}>{formattedPrice.toLocaleString()}₫</b>
+                                    <span>Size: 36</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bottom_action">
+                            <div onClick={handleCloseModal} className="cart_btn_close">
+                                <p style={{ fontSize: '14px' }}>Tiếp tục mua hàng</p>
+                            </div>
+                            <div className="cart_btn_cart">
+                                <NavLink style={{ textDecoration: 'none', color: '#fff' }} to="/cart">
+                                    Xem giỏ hàng
+                                </NavLink>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     )
 }
