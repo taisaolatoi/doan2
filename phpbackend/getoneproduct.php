@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     loaisanpham.tenloai,
     ctloai.tenctloai,
     size.namesize,
+    size_sanpham.idsize,
     size_sanpham.soluong
 FROM
     sanpham

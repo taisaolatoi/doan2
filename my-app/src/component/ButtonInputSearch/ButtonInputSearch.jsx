@@ -7,6 +7,15 @@ import { useState } from "react";
 const ButtonInputSearch =(props) => {
     const {size, placeholder, textbutton } = props
     const [inputValue, setInputValue] = useState('');
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    const handleSearch = () => {
+        window.location.href = `/search?query=${encodeURIComponent(inputValue)}`;
+    };
     return (
         <div style={{ display: 'flex' }}>
             <Input 
@@ -15,6 +24,7 @@ const ButtonInputSearch =(props) => {
             variant="borderless" 
             name="search_name"
             onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
             style={{borderRadius: '0', backgroundColor : '#f3f3f3'}}/>
             
             <NavLink to={`/search?query=${encodeURIComponent(inputValue)}`}>
@@ -24,10 +34,10 @@ const ButtonInputSearch =(props) => {
             style={{borderRadius: '0' ,
             borderColor: '#e95221',
             border: 'none',backgroundColor: '#ccc',
-    
-     
         }}
-            size={size} icon={<SearchOutlined />}>{textbutton}</Button>
+            size={size} 
+            onClick={handleSearch}
+            icon={<SearchOutlined />}>{textbutton}</Button>
             </NavLink>
         </div>
     )

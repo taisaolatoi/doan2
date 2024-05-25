@@ -12,17 +12,8 @@ import Profile from '../component/profile/profile'
 const Adminroute = () => {
     return (
         <>
-        <Header/>
-         <Navbar/>
-            <Routes>
-                <Route path="/" element={<div>
-                    hahahaha
-                </div>} />
-                <Route path="/" element={<div>
-                    hahahaha
-                </div>} />
-            </Routes>
-            <Footer/>
+
+
         </>
     )
 }

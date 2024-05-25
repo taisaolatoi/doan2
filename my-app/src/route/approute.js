@@ -11,6 +11,7 @@ import Profile from '../component/profile/profile'
 import Editprofile from '../component/edit_profile/editprofile';
 import Cart from '../component/cart/cart';
 import Search from '../component/search/search';
+import Checkout from '../component/checkout/checkout';
 
 const Approute = () => {
     return (
@@ -50,8 +51,9 @@ const Approute = () => {
                 <Route path="/search" element={<div>
                     <Search/>
                 </div>} />
-                
-
+                <Route path="/checkout" element={<div>
+                    <Checkout/>
+                </div>} />
             </Routes>
             <Footer/>
         </>

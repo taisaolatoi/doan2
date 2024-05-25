@@ -2,17 +2,41 @@ import { NavLink } from "react-router-dom";
 import { RightOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { Col, Row } from 'antd'
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+
 const ProductInfo = ({ product }) => {
-    const [name] = useState(product.tensanpham);
-    const [price] = useState(product.giasanpham);
-    const [img] = useState(product.hinhanh);
-    const [id] = useState(product.idsanpham);
+    const [name] = useState(product[0].tensanpham);
+    const [price] = useState(product[0].giasanpham);
+    const [img] = useState(product[0].hinhanh);
+    const [id] = useState(product[0].idsanpham);
     const [quantity, setQuantity] = useState(1);
+    const [sizeId, setSizeId] = useState({});
     const [userId, setUserId] = useState('');
     const [showModal, setShowModal] = useState(false);
     // Các state và hàm xử lý sự kiện khác
 
+    const [selectedSize, setSelectedSize] = useState('');
+    const [outOfStockMessage, setOutOfStockMessage] = useState();
+    // const [quantityBySize, setQuantityBySize] = useState({});
 
+    const handleSizeChange = (e) => {
+        const selectedSize = e.target.value;
+        const selectedSizeData = product.find((size) => size.namesize === selectedSize);
+        const newSizeId = { ...sizeId };
+        newSizeId[selectedSize] = selectedSizeData.idsize;
+        setSizeId(newSizeId);
+        setSelectedSize(selectedSize);
+    };
+      
+    //   useEffect(() => {
+    //     const selectedSizeData = product.find((size) => size.namesize === selectedSize);
+      
+    //     if (selectedSizeData && selectedSizeData.soluong < quantity) {
+    //       setOutOfStockMessage('Hết hàng');
+    //     } else {
+    //       setOutOfStockMessage('');
+    //     }
+    //   }, [selectedSize]);
 
     const handleAddToCart = () => {
         // Xử lý logic khi ấn vào nút "Thêm vào giỏ hàng"
@@ -32,13 +56,25 @@ const ProductInfo = ({ product }) => {
         const Id = localStorage.getItem('client');
         setUserId(Id);
     }, []);
+
+    useEffect(() => {
+        product.forEach((size,index) => {
+          if (outOfStockMessage && size.namesize === selectedSize && size.soluong < quantity + 1) {
+            toast.error(outOfStockMessage, {
+              position: 'top-left',
+              autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
+            });
+          }
+        });
+      }, [outOfStockMessage, selectedSize, quantity, product]);
     // console.log(userId)
+    const formattedPrice = parseFloat(product[0].giasanpham);
+    const formattedOldPrice = parseFloat(product[0].giacu);
+    const isAvailable = (product) => {
+        return Object.values(product).some(array => array.some(item => item.soluong > 0));
+    };
 
-    const formattedPrice = parseFloat(product.giasanpham);
-    const formattedOldPrice = parseFloat(product.giacu);
-    const isAvailable = product.soluong > 0;
-
-    const isProductWithSize = ["Áo Cầu Lông", "Quần Cầu Lông", "Váy Cầu Lông", "Giày Cầu Lông"].includes(product.tenloai);
+    const isProductWithSize = ["Áo Cầu Lông", "Quần Cầu Lông", "Váy Cầu Lông", "Giày Cầu Lông","Vợt Cầu Lông"].includes(product[0].tenloai);
 
 
 
@@ -49,60 +85,87 @@ const ProductInfo = ({ product }) => {
     };
 
     const handleIncreaseQuantity = () => {
-        setQuantity(quantity + 1);
-    };
+        const selectedSizeData = product.find((size) => size.namesize === selectedSize);
+      
+        if (selectedSizeData && selectedSizeData.soluong < quantity + 1) {
+          setOutOfStockMessage('Hết Hàng');
+        } else {
+          setOutOfStockMessage('');
+          setQuantity(quantity + 1);
+        }
+      };
 
-    // useEffect(() => {
-    //     const Id = localStorage.getItem('client');
-
-    //     fetch(`http://localhost/doan2/phpbackend/getin4product.php?id=${del}`, {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({ userId: Id }),
-    //     })
-    //       .then(response => response.json())
-    //       .then(data => {
-    //         setData(data.data);
-    //       })
-    //       .catch(error => {
-    //         console.error(error);
-    //       });
-    //   }, []);
-    const handleSubmit = (e) => {
+      const handleSubmit = (e) => {
         e.preventDefault();
-        // Send registration data to PHP backend for processing
-        const data = {
-            userId,
-            name,
-            price,
-            img,
-            id,
-            quantity,
-        };
-
-        fetch('http://localhost/doan2/phpbackend/cart.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(response => response.json())
-            .then(result => {
-                console.log(result); // Log the server response
-                if (result.success) {
-                    console.success(result.message);
-                } else {
-                    console.error(result.message);
-                }
+        // Kiểm tra nếu người dùng đã chọn size
+        if (selectedSize) {
+            // Gửi registration data to PHP backend for processing
+            const data = {
+                userId,
+                name,
+                price,
+                img,
+                id,
+                quantity,
+                selectedSize,
+                sizeId: sizeId[selectedSize]
+            };
+            console.log(data);
+    
+            fetch('http://localhost/doan2/phpbackend/cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             })
-            .catch(error => {
-                console.error(error);
-            });
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result); // Log the server response
+                    if (result.success) {
+                        console.success(result.message);
+                    } else {
+                        console.error(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        } else {
+            // Người dùng không chọn size, gửi sizeId rỗng đến backend
+            const data = {
+                userId,
+                name,
+                price,
+                img,
+                id,
+                quantity,
+                selectedSize: 'N/A',
+                sizeId: 0,
+            };
+            console.log(data);
+    
+            fetch('http://localhost/doan2/phpbackend/cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result); // Log the server response
+                    if (result.success) {
+                        console.success(result.message);
+                    } else {
+                        console.error(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     };
-
 
 
     return (
@@ -116,15 +179,15 @@ const ProductInfo = ({ product }) => {
 
                         <RightOutlined />
 
-                        <li><p>{product.tenloai}</p></li>
+                        <li><p>{product[0].tenloai}</p></li>
 
                         <RightOutlined />
 
-                        <li style={{ textTransform: 'capitalize' }}><p>{product.tenctloai}</p></li>
+                        <li style={{ textTransform: 'capitalize' }}><p>{product[0].tenctloai}</p></li>
 
                         <RightOutlined />
 
-                        <li><p>{product.tensanpham}</p></li>
+                        <li><p>{product[0].tensanpham}</p></li>
                     </ul>
                 </div>
             </div>
@@ -132,26 +195,26 @@ const ProductInfo = ({ product }) => {
                 <Row>
                     <Col span={8}>
                         <div className="product_img_detail">
-                            <img src={product.hinhanh} alt="" />
+                            <img src={product[0].hinhanh} alt="" />
                         </div>
                     </Col>
 
                     <Col span={10}>
                         <div className="detail_desc">
                             <h1 className="title_product">
-                                {product.tensanpham}
+                                {product[0].tensanpham}
                             </h1>
                             <div className="product_top_clearfix">
                                 <span>
                                     Mã:
-                                    <span style={{ color: '#E95221', fontWeight: '500' }}> VNB{product.idsanpham} </span>
+                                    <span style={{ color: '#E95221', fontWeight: '500' }}> VNB{product[0].idsanpham} </span>
                                 </span>
                             </div>
 
                             <div className="inventory_quantity">
                                 <div className="mb-break">
                                     Thương hiệu:
-                                    <span style={{ color: '#E95221' }}> {product.tenthuonghieu}</span>
+                                    <span style={{ color: '#E95221' }}> {product[0].tenthuonghieu}</span>
                                 </div>
                                 <span class="line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                                 <div className="mb-break">
@@ -162,11 +225,11 @@ const ProductInfo = ({ product }) => {
 
                             <form action="" method="post">
                                 <input type="hidden" name="userId" value={userId} />
-                                <input type="hidden" name="idsanpham" value={product.idsanpham} />
-                                <input type="hidden" name="hinhanh" value={product.hinhanh} />
-                                <input type="hidden" name="soluong" value={product.soluong} />
-                                <input type="hidden" name="tensanpham" value={product.tensanpham} />
-                                <input type="hidden" name="giasanpham" value={product.giasanpham} />
+                                <input type="hidden" name="idsanpham" value={product[0].idsanpham} />
+                                <input type="hidden" name="hinhanh" value={product[0].hinhanh} />
+                                <input type="hidden" name="soluong" value={product[0].soluong} />
+                                <input type="hidden" name="tensanpham" value={product[0].tensanpham} />
+                                <input type="hidden" name="giasanpham" value={product[0].giasanpham} />
 
                                 <div className="pricebox_clearfix">
                                     <div className="special_price">
@@ -199,18 +262,23 @@ const ProductInfo = ({ product }) => {
                                             <div style={{ marginBottom: '15px' }} className="size_clearfix">
                                                 <p>Chọn size:</p>
                                                 <div className="group_size">
-                                                    <div className="select_size_input">
-                                                        <input type="radio" id="sizeS" name="size" value="S" />
-                                                        <label htmlFor="sizeS">S</label>
-                                                    </div>
-                                                    <div className="select_size_input">
-                                                        <input type="radio" id="sizeM" name="size" value="M" />
-                                                        <label htmlFor="sizeM">M</label>
-                                                    </div>
-                                                    <div className="select_size_input">
-                                                        <input type="radio" id="sizeL" name="size" value="L" />
-                                                        <label htmlFor="sizeL">L</label>
-                                                    </div>
+                                                    {product.map((size, index) => (
+                                                        <div className="select_size_input" key={index}>
+                                                            <input
+                                                                type="radio"
+                                                                id={`size${index}`}
+                                                                name="size"
+                                                                value={size.namesize}
+                                                                onChange={handleSizeChange}
+                                                                disabled={size.soluong == 0}
+                                                            />
+                                                            <label htmlFor={`size${index}`} className={size.namesize === selectedSize || size.soluong < 1 ? 'disable' : 'selected'}>
+                                                                {size.namesize}
+                                                            </label>
+                                                            
+                                        
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
                                         )}
@@ -229,7 +297,7 @@ const ProductInfo = ({ product }) => {
                                         </div>
                                         <div style={{ marginTop: '20px', width: '300px' }} className="bot_form">
                                             <div onClick={handleAddToCart} className="btn-regis">
-                                                    <button onClick={handleSubmit} type="submit">Thêm vào giỏ hàng</button>
+                                                <button onClick={handleSubmit} type="submit">Thêm vào giỏ hàng</button>
                                             </div>
                                         </div>
                                     </div>
@@ -252,13 +320,13 @@ const ProductInfo = ({ product }) => {
                         </div>
                         <div className="media_content">
                             <div style={{ width: '100px' }} className="thump">
-                                <img style={{ width: '100%', height: '100%' }} src={product.hinhanh} alt="" />
+                                <img style={{ width: '100%', height: '100%' }} src={product[0].hinhanh} alt="" />
                             </div>
                             <div style={{ paddingLeft: '15px' }} className="body_content">
-                                <h4 style={{ fontSize: '14px' }} className="title_product">{product.tensanpham}</h4>
+                                <h4 style={{ fontSize: '14px' }} className="title_product">{product[0].tensanpham}</h4>
                                 <div className="product_new_price">
                                     <b style={{ marginRight: '15px' }}>{formattedPrice.toLocaleString()}₫</b>
-                                    <span>Size: 36</span>
+                                    <span></span>
                                 </div>
                             </div>
                         </div>

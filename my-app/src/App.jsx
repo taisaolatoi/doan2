@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import styled from 'styled-components';
 import Approute from './route/approute';
 import Adminroute from './route/adminroute';
+import CheckoutRoute from './route/checkoutRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -16,7 +17,9 @@ function App() {
           <Route path="/admin/*" element={
             <Adminroute />
           } />
-
+          <Route path="/check_out/*" element={
+            <CheckoutRoute/>
+          } />
           <Route path="/*" element={
             <Approute />
           } />

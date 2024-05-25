@@ -3,7 +3,6 @@
     max-width: 1349px;
     margin: 0 auto;
     max-width: 1349px;
-    height: 400px;
 
 }
 .page_customer{
@@ -86,4 +85,13 @@
     color: #212B25;
     text-transform: uppercase;
     margin-bottom: 27px;
+}
+.ant-modal-content{
+    width: 700px;
+}
+.order_number:hover{
+    color: #E95221;
+}
+td{
+    font-weight: 500;
 }

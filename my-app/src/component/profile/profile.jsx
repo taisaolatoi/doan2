@@ -3,19 +3,26 @@ import { Row, Col } from 'antd';
 import { UserOutlined, PhoneOutlined, PaperClipOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Modal } from 'antd';
+
 import './profile.css';
 
 const Profile = () => {
 
     // const [userId, setUserId] = useState('');
     const navigate = useNavigate();
-
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [orders, setOrders] = useState([]);
     const [customerInfo, setCustomerInfo] = useState({});
+    const handleOrderClick = (order) => {
+        setSelectedOrder(order);
+
+    };
 
     useEffect(() => {
         const client = localStorage.getItem('client');
         // setUserId(client); // Gán giá trị client cho userId
-    
+
         if (!client) {
             navigate('/login');
         } else {
@@ -40,6 +47,38 @@ const Profile = () => {
         }
     }, [navigate]);
 
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            const client = localStorage.getItem('client');
+
+            try {
+                const response = await fetch('http://localhost/doan2/phpbackend/getorder.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId: client }), // Thay yourUserId bằng ID người dùng của bạn
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    setOrders(result); // Cập nhật trạng thái orders với dữ liệu từ API
+                    console.log(orders);
+                } else {
+                    console.error(result.message);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchOrders(); // Gọi hàm fetchOrders để lấy dữ liệu khi component được render
+
+        // Lưu ý: Bạn cần thay đổi dependencies của useEffect nếu cần
+    }, []);
+
+
     return (
         <>
             <div className="page_cus_container">
@@ -60,7 +99,7 @@ const Profile = () => {
                             <h2 className="widget_title">Thông tin khách hàng</h2>
                         </div>
                         <div className="block_content">
-                        <p>
+                            <p>
                                 <UserOutlined />
                                 <b>Họ tên: </b>
                                 {customerInfo.name}
@@ -75,11 +114,11 @@ const Profile = () => {
                                 <b>Địa chỉ: </b>
                                 {customerInfo.address}
                             </p>
-                        <div className="edit_profile">
-                            <NavLink to="/edit_profile">
-                                <p>Sửa thông tin</p>
-                            </NavLink>
-                        </div>
+                            <div className="edit_profile">
+                                <NavLink to="/edit_profile">
+                                    <p>Sửa thông tin</p>
+                                </NavLink>
+                            </div>
 
                         </div>
                     </Col>
@@ -99,11 +138,26 @@ const Profile = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td colSpan={5}>
-                                                    <p>Không có đơn hàng nào</p>
-                                                </td>
-                                            </tr>
+                                            {orders.map((order, index) => (
+                                                <tr key={index}>
+                                                    <td style={{cursor: 'pointer'}} 
+                                                    onClick={() => handleOrderClick(order)} >
+                                                        <p className='order_number'>DH{order.madonhang}</p>
+                                                    </td>
+                                                    <td>{order.ngaydat}</td>
+                                                    <td>{order.address}</td>
+                                                    <td>{order.tonggia}</td>
+                                                    <td>{order.trangthai}</td>
+                                                </tr>
+                                            ))}
+                                            {/* Hiển thị thông báo khi không có đơn hàng */}
+                                            {orders.length === 0 && (
+                                                <tr>
+                                                    <td colSpan={5}>
+                                                        <p>Không có đơn hàng nào</p>
+                                                    </td>
+                                                </tr>
+                                            )}
                                         </tbody>
                                     </table>
                                 </div>
@@ -111,7 +165,36 @@ const Profile = () => {
                         </div>
                     </Col>
                 </Row>
-
+                <Modal
+                    title={`Chi tiết đơn hàng: DH${selectedOrder?.madonhang}`}
+                    visible={!!selectedOrder}
+                    onCancel={() => setSelectedOrder(null)}
+                    footer={null}
+                >
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style={{width: '300px'}}>Tên sản phẩm</th>
+                                <th style={{width: '100px'}}>Hình ảnh</th>
+                                <th style={{width: '100px'}}>Giá</th>
+                                <th style={{width: '100px'}}>Số lượng</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {selectedOrder?.productInfo.map((product, index) => (
+                                <tr key={index}>
+                                    <td>{product.tensanpham}</td>
+                                    <td><img style={{ width: '50px' }} src={product.hinhanh} alt="" /></td>
+                                    <td>{product.giasanpham}</td>
+                                    <td>{product.soluong}</td>
+                                    <td>{product.namesize}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </Modal>
             </div>
         </>
     );

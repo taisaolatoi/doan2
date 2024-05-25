@@ -101,6 +101,9 @@
     margin-top: 10px;
     margin-right: 5px;
 }
+.select_size_input .disable{
+    background-color: #ccc;
+}
 
 .select_size_input input[type="radio"]:checked+label {
     background: #E95221;

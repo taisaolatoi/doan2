@@ -13,8 +13,7 @@ const ProductDetail = () => {
     useEffect(() => {
       axios.get(`http://localhost/doan2/phpbackend/getoneproduct.php?id=${id}`)
         .then(res => {
-          setProduct(res.data[0]);
-          console.log(res);
+          setProduct(res.data);
         })
         .catch(error => {
           console.log(error);
