@@ -1,0 +1,123 @@
+/* Định dạng bảng */
+.container_ad {
+    margin: 25px;
+}
+
+.container_ad>h1 {
+    margin-bottom: 10px;
+}
+
+.container_ad table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Roboto, sans-serif;
+    border: #222222 1.5px solid;
+}
+
+.container_add table button[type="submit"] {
+    color: white;
+    font-size: 12px;
+    padding: 8px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #222222;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+/* Style the options */
+.container_add table button[type="submit"] {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Style the selected option */
+.container_add table button[type="submit"]:checked {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+/* Add hover effect */
+.container_add table button[type="submit"]:hover {
+    border-color: red;
+}
+
+/* Add focus effect */
+.container_add table button[type="submit"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.container_add th,
+td {
+    font-size: 13px;
+    padding: 15px 10px;
+    text-align: center;
+    border: #222222 1px solid;
+}
+
+.container_add th {
+    background-color: #fff;
+    font-weight: bold;
+}
+
+/* Căn chỉnh nội dung */
+.container_add td {
+    vertical-align: middle;
+}
+
+.container_add td:first-child {
+    font-weight: bold;
+}
+
+/* Style the select element */
+.container_add select[name="status"] {
+    color: white;
+    font-size: 12px;
+    padding: 8px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #222222;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+/* Style the options */
+.container_add select[name="status"] option {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Style the selected option */
+.container_add select[name="status"] option:checked {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+/* Add hover effect */
+.container_add select[name="status"]:hover {
+    border-color: red;
+}
+
+/* Add focus effect */
+.container_add select[name="status"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Tạo hiệu ứng màu xen kẻ */
+.container_add tbody tr:nth-child(even) {
+    background-color: #fff;
+    /* Xám nhạt */
+}
+
+.container_add tbody tr:nth-child(odd) {
+    background-color: #AFEEEE;
+    /* Xám sáng */
+}

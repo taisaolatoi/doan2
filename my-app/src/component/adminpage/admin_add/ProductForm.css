@@ -1,0 +1,37 @@
+.productForm {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+
+.productForm .ant-form-item-label {
+  text-align: left;
+  font-weight: bold;
+}
+
+.productForm .ant-input {
+  width: 100%;
+}
+
+.productForm .ant-input-number {
+  width: 100%;
+}
+
+.productForm .ant-btn {
+  width: 100%;
+}
+.productForm .ant-btn-primary {
+  background-color: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+.productForm .ant-btn-primary:hover,
+.productForm .ant-btn-primary:focus {
+  background-color: #fff;
+  border-color: #fff;
+  color: #000;
+}

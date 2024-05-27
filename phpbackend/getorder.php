@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         
         // Thực hiện truy vấn SQL thứ hai để lấy thông tin sản phẩm của từng đơn hàng
-        $sql2 = "SELECT b.tensanpham, b.hinhanh, c.soluong, e.namesize,b.giasanpham
+        $sql2 = "SELECT b.tensanpham, b.url_hinhanh, c.soluong, e.namesize,b.giasanpham
         FROM ctdon c
         INNER JOIN sanpham b ON b.idsanpham = c.masanpham
         INNER JOIN size e ON c.idsize = e.id
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         while ($row_product = pg_fetch_assoc($result2)) {
             $productData[] = array(
                 'tensanpham' => $row_product['tensanpham'],
-                'hinhanh' => $row_product['hinhanh'],
+                'hinhanh' => $row_product['url_hinhanh'],
                 'soluong' => $row_product['soluong'],
                 'namesize' => $row_product['namesize'],
                 'giasanpham' => number_format($row_product['giasanpham']) . '₫',

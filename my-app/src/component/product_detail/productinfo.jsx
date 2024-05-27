@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const ProductInfo = ({ product }) => {
     const [name] = useState(product[0].tensanpham);
     const [price] = useState(product[0].giasanpham);
-    const [img] = useState(product[0].hinhanh);
+    const [img] = useState(product[0].url_hinhanh);
     const [id] = useState(product[0].idsanpham);
     const [quantity, setQuantity] = useState(1);
     const [sizeId, setSizeId] = useState({});
@@ -195,7 +195,7 @@ const ProductInfo = ({ product }) => {
                 <Row>
                     <Col span={8}>
                         <div className="product_img_detail">
-                            <img src={product[0].hinhanh} alt="" />
+                            <img src={product[0].url_hinhanh} alt="" />
                         </div>
                     </Col>
 
@@ -226,7 +226,7 @@ const ProductInfo = ({ product }) => {
                             <form action="" method="post">
                                 <input type="hidden" name="userId" value={userId} />
                                 <input type="hidden" name="idsanpham" value={product[0].idsanpham} />
-                                <input type="hidden" name="hinhanh" value={product[0].hinhanh} />
+                                <input type="hidden" name="hinhanh" value={product[0].url_hinhanh} />
                                 <input type="hidden" name="soluong" value={product[0].soluong} />
                                 <input type="hidden" name="tensanpham" value={product[0].tensanpham} />
                                 <input type="hidden" name="giasanpham" value={product[0].giasanpham} />
@@ -320,7 +320,7 @@ const ProductInfo = ({ product }) => {
                         </div>
                         <div className="media_content">
                             <div style={{ width: '100px' }} className="thump">
-                                <img style={{ width: '100%', height: '100%' }} src={product[0].hinhanh} alt="" />
+                                <img style={{ width: '100%', height: '100%' }} src={product[0].url_hinhanh} alt="" />
                             </div>
                             <div style={{ paddingLeft: '15px' }} className="body_content">
                                 <h4 style={{ fontSize: '14px' }} className="title_product">{product[0].tensanpham}</h4>

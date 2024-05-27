@@ -99,7 +99,7 @@ const ProductPage = () => {
                     <Col style={{ paddingLeft: '10px', paddingRight: '10px' }} span={6} key={index}>
                       <div className="product-thumbail">
                         <NavLink to="" className="img-thumb">
-                          <img style={{ width: '200px', height: '210px' }} src={itemData.hinhanh} alt="" />
+                          <img style={{ width: '200px', height: '210px' }} src={itemData.url_hinhanh} alt="" />
                         </NavLink>
                       </div>
                       <div className="product_info">
