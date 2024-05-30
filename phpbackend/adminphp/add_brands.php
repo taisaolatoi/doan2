@@ -1,17 +1,20 @@
-<?php  
+<?php
 require '../connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
     $_POST = json_decode(file_get_contents('php://input'), true);
-
     $tenthuonghieu = $_POST['name'];
-    $sql = "INSERT into thuonghieu(tenthuonghieu) values ('$tenthuonghieu')";
-    $result = pg_query($conn,$sql);
+
+    // Sử dụng `idthuonghieu` thay vì `id`
+    $sql = "INSERT INTO thuonghieu (tenthuonghieu) VALUES ('$tenthuonghieu') RETURNING idthuonghieu";
+    $result = pg_query($conn, $sql);
 
     if ($result) {
-        $data = array('success' => true, 'message' => 'Đăng ký thành công');
+        $row = pg_fetch_assoc($result);
+        $data = array('idthuonghieu' => $row['idthuonghieu'], 'success' => true, 'message' => 'Thêm thành công');
+    } else {
+        $data = array('success' => false, 'message' => 'Thêm thất bại');
     }
+    echo json_encode($data);
 }
-
 ?>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-// import './productinformation.css';
-import { useNavigate,NavLink } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { message } from 'antd';
+import './productinformation.css';
 
 const ProductInformation = () => {
   const [data, setData] = useState([]);
@@ -25,9 +25,9 @@ const ProductInformation = () => {
 
   const handleDelete = async (index) => {
     try {
-      const productId = data[index].id_sanpham;
+      const productId = data[index].idsanpham;
       await axios.delete('http://localhost/doan2/phpbackend/adminphp/delete_product.php', {
-        data: { id_sanpham: productId },
+        data: { idsanpham: productId },
       });
       fetchData();
       message.success('Product deleted successfully');
@@ -46,9 +46,9 @@ const ProductInformation = () => {
       <thead>
         <tr>
           <th>Sản phẩm</th>
-          <th>Mô tả</th>
+          <th>Thương hiệu</th>
           <th>Giá</th>
-          <th>edit</th>
+          <th>Chỉnh sửa</th>
         </tr>
       </thead>
       <tbody>
@@ -61,14 +61,17 @@ const ProductInformation = () => {
                 </div>
                 <div className="product-details">
                   <p className="product-name">{product.tensanpham}</p>
+                  <p className="product-description">{product.mota}</p>
                 </div>
               </div>
             </td>
-            <td>{product.mota}</td>
+            <td>{product.tenthuonghieu}</td>
             <td>{product.giasanpham}</td>
             <td>
               <div className="actions">
-                <NavLink to={`/admin/update-product/${product.idsanpham}`}><EditOutlined className="edit-icon" onClick={() => handleEdit(product.id_sanpham)} /></NavLink>
+                <NavLink to={`/admin/update-product/${product.idsanpham}`}>
+                  <EditOutlined className="edit-icon" onClick={() => handleEdit(product.idsanpham)} />
+                </NavLink>
                 <DeleteOutlined className="delete-icon" onClick={() => handleDelete(index)} />
               </div>
             </td>

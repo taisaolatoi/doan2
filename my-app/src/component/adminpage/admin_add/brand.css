@@ -1,0 +1,54 @@
+.brands-container {
+    margin: 20px;
+  }
+  
+  .brands-container h2 {
+    margin-bottom: 16px;
+  }
+  
+  .brands-container .ant-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 12px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+  }
+  
+  .brands-container .ant-list-item span {
+    flex-grow: 1;
+  }
+  
+  .brands-container .ant-input {
+    width: 200px;
+  }
+  
+  .brands-container .ant-btn {
+    margin-left: 8px;
+  }
+  
+  .brands-container .ant-btn-primary {
+    background-color: #1890ff;
+    border-color: #1890ff;
+  }
+  
+  .brands-container .ant-btn-primary:hover,
+  .brands-container .ant-btn-primary:focus {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+  }
+  
+  .brands-container .ant-btn-icon-only {
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+    margin-left: 8px;
+  }
+  
+  .brands-container .ant-btn-icon-only:hover,
+  .brands-container .ant-btn-icon-only:focus {
+    color: #000;
+    background-color: #1890ff;
+    border-color: #1890ff;
+  }
