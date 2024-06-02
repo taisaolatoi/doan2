@@ -1,9 +1,11 @@
 <?php
-require '../../connect.php'; 
+require '../connect.php';
+
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
   $data = json_decode(file_get_contents("php://input"), true);
-  $productId = $data['id_sanpham'];
+  $productId = $data['idsanpham'];
 
   if (!$productId) {
     $response = [
@@ -14,19 +16,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     exit;
   }
 
-  $sql = "DELETE FROM sanpham3 WHERE id_sanpham = $productId";
-  $result = pg_query($conn, $sql);
+  // Kiểm tra xem sản phẩm có trong ctdon không
+  $ctdonCheckSql = "SELECT * FROM ctdon WHERE masanpham = $productId";
+  $ctdonCheckResult = pg_query($conn, $ctdonCheckSql);
+  $ctdonCheckRows = pg_num_rows($ctdonCheckResult);
 
-  if ($result) {
+  if ($ctdonCheckRows > 0) {
+    // Nếu sản phẩm có trong ctdon, không thể xóa
+    $response = [
+      'success' => false,
+      'message' => 'Không thể xóa sản phẩm vì nó đang tồn tại trong ctdon'
+    ];
+    echo json_encode($response);
+    exit;
+  }
+
+  // Nếu sản phẩm không trong ctdon, tiến hành xóa
+  $deleteSql = "DELETE FROM sanpham WHERE idsanpham = $productId";
+  $deleteResult = pg_query($conn, $deleteSql);
+
+  if ($deleteResult) {
     $response = [
       'success' => true,
-      'message' => 'Product deleted successfully'
+      'message' => 'Sản phẩm đã được xóa thành công'
     ];
     echo json_encode($response);
   } else {
     $response = [
       'success' => false,
-      'message' => 'Error: ' . pg_last_error($conn)
+      'message' => 'Lỗi: ' . pg_last_error($conn)
     ];
     echo json_encode($response);
   }
@@ -37,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
   if (!$result) {
     $response = [
       'success' => false,
-      'message' => 'Error: ' . pg_last_error($conn)
+      'message' => 'Lỗi: ' . pg_last_error($conn)
     ];
     echo json_encode($response);
     exit;
@@ -50,4 +68,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
   echo json_encode($data);
 }
+
 ?>

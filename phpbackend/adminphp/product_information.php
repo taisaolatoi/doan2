@@ -2,7 +2,9 @@
 require '../connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  $sql = "SELECT idsanpham,tensanpham, giasanpham, url_hinhanh, mota FROM sanpham";
+  $sql = "SELECT sanpham.idsanpham, sanpham.tensanpham, sanpham.giasanpham, sanpham.url_hinhanh, sanpham.mota, thuonghieu.tenthuonghieu 
+          FROM sanpham 
+          JOIN thuonghieu ON sanpham.idthuonghieu = thuonghieu.idthuonghieu";
   $result = pg_query($conn, $sql);
 
   if (!$result) {
