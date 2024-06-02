@@ -2,10 +2,10 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require 'cloudinary.php';
-require '../connect.php'; 
+require '../connect.php';
+require './imgbb.php';
 
-use Cloudinary\Api\Upload\UploadApi;
+
 
 // Nhận dữ liệu từ frontend React.js
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,28 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ten_thuonghieu = $_POST['ten_thuonghieu'];
         $soluong = $_POST['soluong'];
         $id_size = $_POST['id_size'];
+        $hinhanh = $_POST['hinhanh'];
         $url = null;
         $publicId = null;
 
         if (isset($_FILES['hinhanh'])) {
-            // Tải lên hình ảnh lên Cloudinary
-            $data = (new UploadApi())->upload($_FILES['hinhanh']['tmp_name']);
-            if (!$data || !isset($data['secure_url']) || !isset($data['public_id'])) {
-                $response = array('message' => 'Lỗi khi tải lên hình ảnh!');
-                echo json_encode($response);
-                return;
-            }
-            $url = $data['secure_url'];
-            $publicId = $data['public_id'];
+            $url = uploadImageAndGetUrl($hinhanh['tmp_name']);
         }
 
         // Chuẩn bị câu lệnh UPDATE cho bảng sản phẩm
         $sqlUpdateProduct = "UPDATE sanpham SET tensanpham = $1, giasanpham = $2, mota = $3, idthuonghieu = $4, idloai = $5";
         $paramsUpdateProduct = array($tensanpham, $giasanpham, $mota, $id_thuonghieu, $id_loai);
 
-        if ($url && $publicId) {
-            $sqlUpdateProduct .= ", id_hinhanh = $6, url_hinhanh = $7";
-            $paramsUpdateProduct[] = $publicId;
+        if ($url) {
+            $sqlUpdateProduct .= "url_hinhanh = $7";
             $paramsUpdateProduct[] = $url;
         }
 
