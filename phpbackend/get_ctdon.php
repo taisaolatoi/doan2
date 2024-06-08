@@ -2,19 +2,9 @@
 require './connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $query = "SELECT 
-        donhang.madonhang,
-        thongtinkh.hoten,
-        donhang.ngaydat,
-        donhang.tonggia,
-        donhang.pttt,
-        donhang.trangthai,
-		ctdon.idsize
-    FROM donhang
-    JOIN thongtinkh
-	ON donhang.id_thongtinkh = thongtinkh.id_thongtinkh
-	JOIN ctdon on ctdon.madonhang = donhang.madonhang
-	order by donhang.madonhang;";
+    $id = $_GET['madonhang'];
+    $query = "SELECT * 
+    FROM ctdon where madonhang = $id";
 
     $result = pg_query($conn, $query);
     if (!$result) {

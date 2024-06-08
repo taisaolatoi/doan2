@@ -42,13 +42,13 @@ const OrderDetail = () => {
                 <tbody>
                     {orders.map((order) => (
                         <tr key={order.id}>
-                            <td>{order.madonhang}</td>
+                            <td>DH{order.madonhang}</td>
                             <td>{order.tensanpham}</td>
                             <td>
                                 <img style={{ width: '50px' }} src={order.url_hinhanh} />
                             </td>
                             <td>{order.soluong}</td>
-                            <td>{order.giasanpham}</td>
+                            <td>{parseFloat(order.giasanpham).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
                         </tr>
                     ))}
                 </tbody>

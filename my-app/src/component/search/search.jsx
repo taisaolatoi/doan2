@@ -19,6 +19,7 @@ const Search = () => {
         axios.get(`http://localhost/doan2/phpbackend/getsearch.php?search=${query}`)
             .then(res => {
                 setData(res.data)
+                window.scrollTo(0, 0);
             })
             .catch(error => {
                 console.log(error);

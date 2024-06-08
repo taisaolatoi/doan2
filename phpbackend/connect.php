@@ -5,6 +5,6 @@ header("Access-Control-Allow-Headers: Content-Type");
 header('Access-Control-Allow-Credentials: true');
 
 
-$conn = pg_connect("host=localhost dbname=caulong3 user=postgres password=1234");
+$conn = pg_connect("host=localhost dbname=caulong user=postgres password=1");
 return $conn;
 ?>

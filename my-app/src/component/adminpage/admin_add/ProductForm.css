@@ -23,6 +23,7 @@
 .productForm .ant-btn {
   width: 100%;
 }
+
 .productForm .ant-btn-primary {
   background-color: #000;
   border-color: #000;
@@ -34,4 +35,21 @@
   background-color: #fff;
   border-color: #fff;
   color: #000;
+}
+
+.size-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  /* gap: 10px; */
+}
+
+.size-name {
+  /* margin-right: 8px; */
+  font-weight: bold;
+  width: 30px;
+}
+
+.quantity-input {
+  width: 80px;
 }

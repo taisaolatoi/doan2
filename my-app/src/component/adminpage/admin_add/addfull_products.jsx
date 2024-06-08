@@ -170,7 +170,7 @@ const AddProductForm = () => {
                     </Select>
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                     label="Kích thước"
                     name="id"
                     rules={[{ required: true, message: 'Vui lòng chọn kích thước!' }]}
@@ -190,7 +190,7 @@ const AddProductForm = () => {
                     rules={[{ required: true, message: 'Vui lòng nhập số lượng sản phẩm!' }]}
                 >
                     <InputNumber min={0} value={soluong} onChange={(value) => setSoluong(value)} />
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item label="Hình ảnh">
                     <input type="file" onChange={handleFileChange} />

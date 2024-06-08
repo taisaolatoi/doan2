@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useNavigate, NavLink } from 'react-router-dom';
-import { message } from 'antd';
+import { message as antMessage } from 'antd'; // Import thư viện message từ Ant Design
+
 import './productinformation.css';
 
 const ProductInformation = () => {
@@ -22,18 +23,35 @@ const ProductInformation = () => {
       console.error(error);
     }
   };
-
   const handleDelete = async (index) => {
     try {
       const productId = data[index].idsanpham;
-      await axios.delete('http://localhost/doan2/phpbackend/adminphp/delete_product.php', {
+      const response = await axios.delete('http://localhost/doan2/phpbackend/adminphp/delete_product.php', {
         data: { idsanpham: productId },
       });
       fetchData();
-      message.success('Product deleted successfully');
+
+      // Trích xuất success và message từ phản hồi
+      const { success, message } = response.data;
+
+      if (success === false) {
+        antMessage.error(message); // Hiển thị thông báo lỗi khi thất bại
+      } else {
+        antMessage.success('Xóa sản phẩm thành công'); // Hiển thị thông báo thành công
+      }
     } catch (error) {
       console.error(error);
-      message.error('An error occurred while deleting the product');
+      if (error.response) {
+        const { success, message } = error.response.data;
+
+        if (success === false) {
+          antMessage.error(message); // Hiển thị thông báo lỗi từ phản hồi
+        } else {
+          antMessage.error('Đã xảy ra lỗi khi xóa sản phẩm');
+        }
+      } else {
+        antMessage.error('Đã xảy ra lỗi khi xóa sản phẩm');
+      }
     }
   };
 
@@ -52,31 +70,35 @@ const ProductInformation = () => {
         </tr>
       </thead>
       <tbody>
-        {data.map((product, index) => (
-          <tr key={index}>
-            <td>
-              <div className="product-item">
-                <div className="image-container">
-                  <img src={product.url_hinhanh} alt="" className="product-image" />
+        {data.map((product, index) => {
+          const formattedPrice = parseFloat(product.giasanpham); // Định dạng giá sản phẩm với 2 số thập phân
+
+          return (
+            <tr key={index}>
+              <td>
+                <div className="product-item">
+                  <div className="image-container">
+                    <img src={product.url_hinhanh} alt="" className="product-image" />
+                  </div>
+                  <div className="product-details">
+                    <p className="product-name">{product.tensanpham}</p>
+                    <p className="product-description">{product.mota}</p>
+                  </div>
                 </div>
-                <div className="product-details">
-                  <p className="product-name">{product.tensanpham}</p>
-                  <p className="product-description">{product.mota}</p>
+              </td>
+              <td>{product.tenthuonghieu}</td>
+              <td>{formattedPrice.toLocaleString()}đ</td> {/* Hiển thị giá sản phẩm đã được định dạng */}
+              <td>
+                <div className="actions">
+                  <NavLink to={`/admin/update-product/${product.idsanpham}`}>
+                    <EditOutlined className="edit-icon" onClick={() => handleEdit(product.idsanpham)} />
+                  </NavLink>
+                  <DeleteOutlined className="delete-icon" onClick={() => handleDelete(index)} />
                 </div>
-              </div>
-            </td>
-            <td>{product.tenthuonghieu}</td>
-            <td>{product.giasanpham}</td>
-            <td>
-              <div className="actions">
-                <NavLink to={`/admin/update-product/${product.idsanpham}`}>
-                  <EditOutlined className="edit-icon" onClick={() => handleEdit(product.idsanpham)} />
-                </NavLink>
-                <DeleteOutlined className="delete-icon" onClick={() => handleDelete(index)} />
-              </div>
-            </td>
-          </tr>
-        ))}
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

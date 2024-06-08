@@ -2,6 +2,8 @@ import SectionNewProduct from "../SectionNewProduct/SectionNewProduct";
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
+import { NavLink } from 'react-router-dom';
+
 import './TypeProDuct.css'
 
 const TypeProDuct = () => {
@@ -19,18 +21,22 @@ const TypeProDuct = () => {
 
 
     return (
-        <div className="container-main-type" style={{padding: '0 45px', maxWidth: '1350px', margin: '0 auto'}}>
+        <div className="container-main-type" style={{ padding: '0 45px', maxWidth: '1350px', margin: '0 auto' }}>
             <SectionNewProduct textbaner='Sản Phẩm Cầu Lông' />
-            <Row style={{marginLeft: '-10px', marginRight: '-10px'}}>
+            <Row style={{ marginLeft: '-10px', marginRight: '-10px' }}>
                 {data.map(item => (
-                    <Col span={6} style={{padding: '10px'}}>
+                    <Col span={6} style={{ padding: '10px' }}>
                         <div className="snip-banner">
-                            <img style={{ width: '300px', height: '300px' }} src={item.hinhanh}  />
-                            <div className="content-snip-banner"><p>{item.tenloai}</p></div>
+                            <img style={{ width: '300px', height: '300px' }} src={item.hinhanh} />
+                            <NavLink style={{color: '#fff'}} to={{ pathname: '/search', search: `?query=${item.tenloai}` }}>
+                                <div className="content-snip-banner">
+                                    <p>{item.tenloai}</p>
+                                </div>
+                            </NavLink>
                             <a href=""></a>
                         </div>
                     </Col>
-            ))}
+                ))}
             </Row>
         </div>
     )

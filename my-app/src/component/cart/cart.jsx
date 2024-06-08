@@ -78,39 +78,39 @@ const Cart = () => {
                                             const updatedQuantities = [...quantities];
                                             const currentQuantity = parseInt(updatedQuantities[productIndex]);
                                             const maxQuantity = data[productIndex]?.soluongdb;
-                                          
+
                                             if (currentQuantity < maxQuantity) {
-                                              updatedQuantities[productIndex] = (currentQuantity + 1).toString();
-                                              setQuantities(updatedQuantities);
-                                              updateCartQuantity(productIndex, currentQuantity + 1); // Gửi yêu cầu cập nhật số lượng mới trong bảng cart
+                                                updatedQuantities[productIndex] = (currentQuantity + 1).toString();
+                                                setQuantities(updatedQuantities);
+                                                updateCartQuantity(productIndex, currentQuantity + 1); // Gửi yêu cầu cập nhật số lượng mới trong bảng cart
                                             } else {
-                                              const message = `Số lượng trong giỏ hàng chỉ còn ${currentQuantity}`;
-                                              toast.warning(message, {
-                                                position: 'top-center',
-                                                autoClose: 3000,
-                                              });
+                                                const message = `Số lượng trong giỏ hàng chỉ còn ${currentQuantity}`;
+                                                toast.warning(message, {
+                                                    position: 'top-center',
+                                                    autoClose: 3000,
+                                                });
                                             }
-                                          };
-                                          
-                                          const handleDecreaseQuantity = (productIndex) => {
+                                        };
+
+                                        const handleDecreaseQuantity = (productIndex) => {
                                             if (quantities[productIndex] > 1) {
-                                              const updatedQuantities = [...quantities];
-                                              updatedQuantities[productIndex] -= 1;
-                                              setQuantities(updatedQuantities);
-                                              updateCartQuantity(productIndex, quantities[productIndex] - 1); // Gửi yêu cầu cập nhật số lượng mới trong bảng cart
+                                                const updatedQuantities = [...quantities];
+                                                updatedQuantities[productIndex] -= 1;
+                                                setQuantities(updatedQuantities);
+                                                updateCartQuantity(productIndex, quantities[productIndex] - 1); // Gửi yêu cầu cập nhật số lượng mới trong bảng cart
                                             }
-                                          };
-                                          
-                                          const updateCartQuantity = (productIndex, newQuantity) => {
+                                        };
+
+                                        const updateCartQuantity = (productIndex, newQuantity) => {
                                             const updatedCart = [...data];
                                             updatedCart[productIndex].soluong = newQuantity;
                                             setData(updatedCart);
-                                          };
-                                          
+                                        };
+
 
                                         // Tính tổng tiền
                                         total += formattedPrice * quantities[productIndex];
-                                        <ToastContainer/>
+                                        <ToastContainer />
                                         return (
                                             <div className="cart_body" key={index}>
                                                 <div className="cart_product">
@@ -131,6 +131,7 @@ const Cart = () => {
                                                                     type="number"
                                                                     value={quantities[productIndex]}
                                                                     min="1"
+                                                                    readOnly
                                                                     onChange={(e) => {
                                                                         const updatedQuantities = [...quantities];
                                                                         updatedQuantities[productIndex] = parseInt(e.target.value) || 1;

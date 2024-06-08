@@ -24,13 +24,16 @@ const HeaderComponent = () => {
 
   useEffect(() => {
     const client = localStorage.getItem('client');
-    if (client) {
+    const admin = localStorage.getItem('admin')
+    if (client || admin) {
       setIsLoggedIn(true);
     }
   }, [isLoggedIn]);
 
   const handleLogout = () => {
     localStorage.removeItem('client');
+    localStorage.removeItem('admin');
+
     setIsLoggedIn(false);
   };
   return (

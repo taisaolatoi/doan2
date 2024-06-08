@@ -9,7 +9,7 @@ require './imgbb.php';
 // Nhận dữ liệu từ frontend React.js
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Kiểm tra giá trị của $_POST và $_FILES
-    if (isset($_POST['tensanpham'], $_POST['giasanpham'], $_POST['mota'], $_FILES['hinhanh'], $_POST['id_thuonghieu'], $_POST['id_loai'], $_POST['id_size'], $_POST['soluong'])) {
+    if (isset($_POST['tensanpham'], $_POST['giasanpham'], $_POST['mota'], $_FILES['hinhanh'], $_POST['id_thuonghieu'], $_POST['id_loai'])) {
         $tensanpham = $_POST['tensanpham'];
         $giasanpham = $_POST['giasanpham'];
         $mota = $_POST['mota'];
@@ -18,8 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_loai = $_POST['id_loai'];
         $ten_loai = $_POST['ten_loai'];
         $ten_thuonghieu = $_POST['ten_thuonghieu'];
-        $soluong = $_POST['soluong'];
-        $id_size = $_POST['id_size'];
 
         // Tải lên hình ảnh lên Cloudinary
 
@@ -58,50 +56,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Kiểm tra kết quả thêm dữ liệu mới và gửi phản hồi về frontend
 
         // Kiểm tra sản phẩm có tồn tại trong bảng "sanpham3" với cùng tên và kích thước
-        $sqlCheckProduct = "SELECT sp.idsanpham, sp.tensanpham, ss.idsize
+        $sqlCheckProduct = "SELECT sp.idsanpham, sp.tensanpham
                             FROM sanpham sp
-                            INNER JOIN size_sanpham ss ON sp.idsanpham = ss.idsanpham
-                            WHERE LOWER(sp.tensanpham) = LOWER($1) AND ss.idsize = $2";
-        $paramsCheckProduct = array($tensanpham, $id_size);
+                            WHERE LOWER(sp.tensanpham) = LOWER($1)";
+        $paramsCheckProduct = array($tensanpham);
         $resultCheckProduct = pg_query_params($conn, $sqlCheckProduct, $paramsCheckProduct);
         $existingProduct = pg_fetch_assoc($resultCheckProduct);
 
 
-        $sqlCheckProduct1 = "SELECT sp.idsanpham, sp.tensanpham
-        FROM sanpham sp
-        INNER JOIN size_sanpham ss ON sp.idsanpham = ss.idsanpham
-        WHERE LOWER(sp.tensanpham) = LOWER($1)";
-        $paramsCheckProduct1 = array($tensanpham);
-        $resultCheckProduct1 = pg_query_params($conn, $sqlCheckProduct1, $paramsCheckProduct1);
-        $existingProduct1 = pg_fetch_assoc($resultCheckProduct1);
+
+
+
+        if ($ten_loai == 'Giày Cầu Lông') {
+            $getSizeVot = "SELECT * FROM size WHERE id > 5 ORDER BY id";
+        } else if ($ten_loai == 'Áo Cầu Lông' || $ten_loai == 'Quần Cầu Lông' || $ten_loai == 'Váy Cầu Lông') {
+            $getSizeVot = "SELECT * FROM size WHERE id BETWEEN 1 AND 5 ORDER BY id";
+        } else {
+            $getSizeVot = "SELECT * FROM size WHERE id = 0";
+        }
+        $stmt = pg_prepare($conn, "get_size_query", $getSizeVot);
+        $resultGetSizeVot = pg_execute($conn, "get_size_query", array());
+
+
+
+
+
 
         if ($existingProduct) {
-            // Sản phẩm đã tồn tại với cùng kích thước, cập nhật số lượng trong bảng "size_sanpham"
-            $sqlUpdateQuantity = "UPDATE size_sanpham SET soluong = soluong + $1 WHERE idsanpham = $2 AND idsize = $3";
-            $paramsUpdateQuantity = array($soluong, $existingProduct['idsanpham'], $id_size);
-            $resultUpdateQuantity = pg_query_params($conn, $sqlUpdateQuantity, $paramsUpdateQuantity);
-
-            if ($resultUpdateQuantity) {
-                $response = array('message' => 'Cập nhật số lượng sản phẩm thành công!');
-                echo json_encode($response);
-            } else {
-                $response = array('message' => 'Có lỗi xảy ra khi cập nhật số lượng sản phẩm!');
-
-                echo json_encode($response);
-            }
-        } else if ($existingProduct1) {
-            $sqlUpdateQuantity = "INSERT INTO size_sanpham(idsanpham,idsize,soluong) values ($1,$2,$3)";
-            $paramsUpdateQuantity = array($existingProduct1['idsanpham'], $id_size, $soluong);
-            $resultUpdateQuantity = pg_query_params($conn, $sqlUpdateQuantity, $paramsUpdateQuantity);
-
-            if ($resultUpdateQuantity) {
-                $response = array('message' => 'Cập nhật số lượng sản phẩm thành công!');
-                echo json_encode($response);
-            } else {
-                $response = array('message' => 'Có lỗi xảy ra khi cập nhật số lượng sản phẩm!');
-
-                echo json_encode($response);
-            }
+            $response = array('message' => 'Sản phẩm đã tồn tại!');
+            echo json_encode($response);
 
         } else {
             if ($id_ctloai === null) {
@@ -121,17 +104,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id_sanpham = $rowInsertProduct['idsanpham'];
 
                 // Thêm vào bảng "size_sanpham"
-                $sqlInsertSize = "INSERT INTO size_sanpham (idsanpham, idsize, soluong) VALUES ($1, $2, $3)";
-                $paramsInsertSize = array($id_sanpham, $id_size, $soluong);
-                $resultInsertSize = pg_query_params($conn, $sqlInsertSize, $paramsInsertSize);
+                while ($rowSize = pg_fetch_assoc($resultGetSizeVot)) {
+                    $id_size = $rowSize['id']; // Lấy id của size từ kết quả truy vấn
+                    $soluong = 0; // Đặt số lượng ban đầu là 0 hoặc giá trị mặc định khác
 
-                if ($resultInsertSize) {
-                    $response = array('message' => 'Thêm sản phẩm và cập nhật số lượng thành công!');
-                    echo json_encode($response);
-                } else {
-                    $response = array('message' => 'Có lỗi xảy ra khi thêm dữ liệu kích thước!');
+                    // Thêm vào bảng "size_sanpham"
+                    $sqlInsertSize = "INSERT INTO size_sanpham (idsanpham, idsize, soluong) VALUES ($1, $2, $3)";
+                    $paramsInsertSize = array($id_sanpham, $id_size, $soluong);
+                    $resultInsertSize = pg_query_params($conn, $sqlInsertSize, $paramsInsertSize);
 
-                    echo json_encode($response);
+                    if (!$resultInsertSize) {
+                        // Xử lý khi có lỗi xảy ra
+                        $response = array('message' => 'Có lỗi xảy ra khi thêm dữ liệu kích thước!');
+                        echo json_encode($response);
+                        exit; // Dừng chương trình
+                    }
                 }
             } else {
                 $response = array('message' => 'Có lỗi xảy ra khi thêm sản phẩm!');
@@ -141,5 +128,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
     }
-
 }
+

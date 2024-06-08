@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { RightOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { RightOutlined, CheckCircleOutlined,InboxOutlined } from "@ant-design/icons";
 import { Col, Row } from 'antd'
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
-
+import Comment
+ from "../comment/comment";
 const ProductInfo = ({ product }) => {
     const [name] = useState(product[0].tensanpham);
     const [price] = useState(product[0].giasanpham);
@@ -27,10 +28,10 @@ const ProductInfo = ({ product }) => {
         setSizeId(newSizeId);
         setSelectedSize(selectedSize);
     };
-      
+
     //   useEffect(() => {
     //     const selectedSizeData = product.find((size) => size.namesize === selectedSize);
-      
+
     //     if (selectedSizeData && selectedSizeData.soluong < quantity) {
     //       setOutOfStockMessage('Hết hàng');
     //     } else {
@@ -39,11 +40,21 @@ const ProductInfo = ({ product }) => {
     //   }, [selectedSize]);
 
     const handleAddToCart = () => {
-        // Xử lý logic khi ấn vào nút "Thêm vào giỏ hàng"
         if (userId) {
-            setShowModal(true); // Hiển thị modal khi thêm vào giỏ hàng thành công
+            if (selectedSize) {
+                setShowModal(true); // Hiển thị modal khi thêm vào giỏ hàng thành công
+            } else {
+                toast.error('Chọn Size!!', {
+                    position: 'top-left',
+                    autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
+                });
+            }
 
         } else {
+            toast.error('Cần đăng nhập để mua hàng!!', {
+                position: 'top-left',
+                autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
+            });
             setShowModal(false);
         }
     };
@@ -58,23 +69,22 @@ const ProductInfo = ({ product }) => {
     }, []);
 
     useEffect(() => {
-        product.forEach((size,index) => {
-          if (outOfStockMessage && size.namesize === selectedSize && size.soluong < quantity + 1) {
-            toast.error(outOfStockMessage, {
-              position: 'top-left',
-              autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
-            });
-          }
+        product.forEach((size, index) => {
+            if (outOfStockMessage && size.namesize === selectedSize && size.soluong < quantity + 1) {
+                toast.error(outOfStockMessage, {
+                    position: 'top-left',
+                    autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
+                });
+            }
         });
-      }, [outOfStockMessage, selectedSize, quantity, product]);
+    }, [outOfStockMessage, selectedSize, quantity, product]);
     // console.log(userId)
     const formattedPrice = parseFloat(product[0].giasanpham);
     const formattedOldPrice = parseFloat(product[0].giacu);
     const isAvailable = (product) => {
-        return Object.values(product).some(array => array.some(item => item.soluong > 0));
+        return Array.isArray(product) && product.some(item => item.soluong > 0);
     };
-
-    const isProductWithSize = ["Áo Cầu Lông", "Quần Cầu Lông", "Váy Cầu Lông", "Giày Cầu Lông","Vợt Cầu Lông"].includes(product[0].tenloai);
+    const isProductWithSize = ["Áo Cầu Lông", "Quần Cầu Lông", "Váy Cầu Lông", "Giày Cầu Lông", "Vợt Cầu Lông"].includes(product[0].tenloai);
 
 
 
@@ -86,16 +96,16 @@ const ProductInfo = ({ product }) => {
 
     const handleIncreaseQuantity = () => {
         const selectedSizeData = product.find((size) => size.namesize === selectedSize);
-      
-        if (selectedSizeData && selectedSizeData.soluong < quantity + 1) {
-          setOutOfStockMessage('Hết Hàng');
-        } else {
-          setOutOfStockMessage('');
-          setQuantity(quantity + 1);
-        }
-      };
 
-      const handleSubmit = (e) => {
+        if (selectedSizeData && selectedSizeData.soluong < quantity + 1) {
+            setOutOfStockMessage('Hết Hàng');
+        } else {
+            setOutOfStockMessage('');
+            setQuantity(quantity + 1);
+        }
+    };
+
+    const handleSubmit = (e) => {
         e.preventDefault();
         // Kiểm tra nếu người dùng đã chọn size
         if (selectedSize) {
@@ -111,7 +121,7 @@ const ProductInfo = ({ product }) => {
                 sizeId: sizeId[selectedSize]
             };
             console.log(data);
-    
+
             fetch('http://localhost/doan2/phpbackend/cart.php', {
                 method: 'POST',
                 headers: {
@@ -144,7 +154,7 @@ const ProductInfo = ({ product }) => {
                 sizeId: 0,
             };
             console.log(data);
-    
+
             fetch('http://localhost/doan2/phpbackend/cart.php', {
                 method: 'POST',
                 headers: {
@@ -166,6 +176,14 @@ const ProductInfo = ({ product }) => {
                 });
         }
     };
+
+    function handleKeyDown(e) {
+        e.preventDefault();
+    }
+
+    function handlePaste(e) {
+        e.preventDefault();
+    }
 
 
     return (
@@ -219,7 +237,7 @@ const ProductInfo = ({ product }) => {
                                 <span class="line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                                 <div className="mb-break">
                                     Tình trạng:
-                                    <span style={{ color: '#E95221' }}>{isAvailable ? ' Còn hàng' : ' Hết hàng'}</span>
+                                    <span style={{ color: '#E95221' }}>{isAvailable(product) ? ' Còn hàng' : ' Hết hàng'}</span>
                                 </div>
                             </div>
 
@@ -262,7 +280,7 @@ const ProductInfo = ({ product }) => {
                                             <div style={{ marginBottom: '15px' }} className="size_clearfix">
                                                 <p>Chọn size:</p>
                                                 <div className="group_size">
-                                                    {product.map((size, index) => (
+                                                    {product.sort((a, b) => a.idsize - b.idsize).map((size, index) => (
                                                         <div className="select_size_input" key={index}>
                                                             <input
                                                                 type="radio"
@@ -270,13 +288,11 @@ const ProductInfo = ({ product }) => {
                                                                 name="size"
                                                                 value={size.namesize}
                                                                 onChange={handleSizeChange}
-                                                                disabled={size.soluong == 0}
+                                                                disabled={size.soluong <= 0}
                                                             />
                                                             <label htmlFor={`size${index}`} className={size.namesize === selectedSize || size.soluong < 1 ? 'disable' : 'selected'}>
                                                                 {size.namesize}
                                                             </label>
-                                                            
-                                        
                                                         </div>
                                                     ))}
                                                 </div>
@@ -290,9 +306,12 @@ const ProductInfo = ({ product }) => {
                                                 type="text"
                                                 value={quantity}
                                                 maxLength="2"
-                                                min="1"
+                                                onPaste={handlePaste}
+                                                onKeyDown={handleKeyDown}
                                                 onChange={(e) => setQuantity(e.target.value)}
+
                                             />
+
                                             <button type="button" className="increase-btn" onClick={handleIncreaseQuantity}>+</button>
                                         </div>
                                         <div style={{ marginTop: '20px', width: '300px' }} className="bot_form">

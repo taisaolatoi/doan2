@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Input, InputNumber, Button, message, Select } from 'antd';
 import { useParams } from 'react-router-dom';
-// import './ProductForm.css';
 
 const { Option } = Select;
 
@@ -14,9 +13,13 @@ const UpdateProductForm = () => {
   const [thuongHieuOptions, setThuongHieuOptions] = useState([]);
   const [sizeOptions, setSizeOptions] = useState([]);
   const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(0); // Khởi tạo số lượng ban đầu là 0
+  const [size, setSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState(null);
+  console.log(quantity);
 
   useEffect(() => {
-    axios.get('http://localhost/doan2/phpbackend/adminphp/get_size.php')
+    axios.get(`http://localhost/doan2/phpbackend/adminphp/get_size.php?idsanpham=${id}`)
       .then(response => setSizeOptions(response.data))
       .catch(error => message.error('Không thể lấy dữ liệu kích thước.'));
 
@@ -36,32 +39,41 @@ const UpdateProductForm = () => {
       .catch(error => message.error('Không thể lấy dữ liệu sản phẩm.'));
   }, [id, form]);
 
+  const handleSizeChange = (value) => {
+    axios.get(`http://localhost/doan2/phpbackend/adminphp/get_size_quantity.php?size=${value}&idsanpham=${id}`)
+      .then(response => {
+        setQuantity(response.data.soluong); // Cập nhật giá trị số lượng
+        setSelectedSize(value);
+      })
+      .catch(error => {
+        console.error(error);
+        message.error('Có lỗi xảy ra khi lấy số lượng kích thước.');
+      });
+  };
+
+  useEffect(() => {
+    handleSizeChange(size); // Chạy lại hàm handleSizeChange khi giá trị của size thay đổi
+  }, [size]);
+
+
+
   const handleSubmit = async (values) => {
     try {
-      const getTenLoaiById = (id) => {
-        const loai = loaiOptions.find(item => item.idloai === id);
-        return loai ? loai.tenloai : '';
-      };
-
-      const getTenThuongHieuById = (id) => {
-        const thuonghieu = thuongHieuOptions.find(item => item.idthuonghieu === id);
-        return thuonghieu ? thuonghieu.tenthuonghieu : '';
-      };
-
       const formData = new FormData();
       formData.append('id', id);
+      form.validateFields(['soluong']);
       formData.append('tensanpham', values.tensanpham);
       formData.append('giasanpham', values.giasanpham);
       formData.append('mota', values.mota);
       if (hinhanh) {
         formData.append('hinhanh', hinhanh);
+      } else {
+        formData.append('hinhanh', null); // Gửi hình ảnh là null khi không có hình ảnh được cập nhật
       }
       formData.append('id_loai', values.idloai);
       formData.append('id_thuonghieu', values.idthuonghieu);
-      formData.append('ten_loai', getTenLoaiById(values.idloai));
-      formData.append('ten_thuonghieu', getTenThuongHieuById(values.idthuonghieu));
-      formData.append('soluong', values.soluong);
-      formData.append('id_size', values.idsize);
+      formData.append('soluong', quantity); // Sử dụng giá trị quantity từ state
+      formData.append('id_size', selectedSize);
 
       const response = await axios.post(
         'http://localhost/doan2/phpbackend/adminphp/update_sanpham.php',
@@ -141,13 +153,13 @@ const UpdateProductForm = () => {
         </Form.Item>
 
         <Form.Item
-          name="idsize"
+          // name="idsize"
           label="Kích thước"
           rules={[{ required: true, message: 'Vui lòng chọn kích thước!' }]}
         >
-          <Select placeholder="Chọn kích thước">
+          <Select placeholder="Chọn kích thước" onChange={handleSizeChange}>
             {sizeOptions.map((size) => (
-              <Option key={size.idsize} value={size.idsize}>
+              <Option key={size.id} value={size.idsize}>
                 {size.namesize}
               </Option>
             ))}
@@ -156,11 +168,13 @@ const UpdateProductForm = () => {
 
         <Form.Item
           label="Số lượng"
-          name="soluong"
+          // name="soluong"
           rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
         >
-          <InputNumber min={0} />
+          <InputNumber min={0} value={quantity} onChange={(value) => setQuantity(value)} />
         </Form.Item>
+
+        <img style={{width: '100px' , marginLeft: '30%'}} src={product.url_hinhanh} alt="" />
 
         <Form.Item label="Hình ảnh">
           <input type="file" onChange={handleFileChange} />

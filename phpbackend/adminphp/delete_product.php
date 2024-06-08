@@ -25,13 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Nếu sản phẩm có trong ctdon, không thể xóa
     $response = [
       'success' => false,
-      'message' => 'Không thể xóa sản phẩm vì nó đang tồn tại trong ctdon'
+      'message' => 'Không thể xóa sản phẩm vì nó đang tồn tại trong đơn hàng'
     ];
     echo json_encode($response);
     exit;
   }
 
-  // Nếu sản phẩm không trong ctdon, tiến hành xóa
+  $delSize = "DELETE from size_sanpham where idsanpham = $productId";
+  $deleteSize = pg_query($conn, $delSize);
+
   $deleteSql = "DELETE FROM sanpham WHERE idsanpham = $productId";
   $deleteResult = pg_query($conn, $deleteSql);
 

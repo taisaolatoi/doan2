@@ -11,6 +11,7 @@ const Editprofile = () => {
 
     useEffect(() => {
         const client = localStorage.getItem('client');
+
         if (!client) {
             navigate('/login');
         }
@@ -33,8 +34,8 @@ const Editprofile = () => {
                             </div>
                         </div>
                         <div className="login-regist-form">
-                            <Formupdate/>
-                            <Formchangepass/>
+                            <Formupdate />
+                            <Formchangepass />
                         </div>
                     </Col>
                     <Col span={4}></Col>

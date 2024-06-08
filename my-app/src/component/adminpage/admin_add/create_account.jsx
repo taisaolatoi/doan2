@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Select, Button, message } from 'antd';
+import { useEffect } from 'react';
+import AccountIn4 from './accountin4';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -8,10 +10,12 @@ const AccountCreationForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
+
+
   const onFinish = async (values) => {
     setLoading(true);
 
-    try { 
+    try {
       const checkResponse = await axios.get(`http://localhost/doan2/phpbackend/adminphp/check_username.php?username=${values.username}`);
       if (checkResponse.data.exists) {
         message.error('Username already exists.');
@@ -39,53 +43,58 @@ const AccountCreationForm = () => {
     }
   };
 
+
   return (
-    <Form form={form} onFinish={onFinish} layout="vertical">
-      <Form.Item
-        name="username"
-        label="Username"
-        rules={[{ required: true, message: 'Please enter the username' }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        name="password"
-        label="Password"
-        rules={[{ required: true, message: 'Please enter the password' }]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item
-        name="role"
-        label="Role"
-        rules={[{ required: true, message: 'Please select the role' }]}
-      >
-        <Select placeholder="Select a role">
-          <Option value="admin">Admin</Option>
-          <Option value="user">User</Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="name"
-        label="Name"
-        rules={[{ required: true, message: 'Please enter the name' }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={loading}
+    <>
+      <Form form={form} onFinish={onFinish} layout="vertical">
+        <Form.Item
+          name="username"
+          label="Username"
+          rules={[{ required: true, message: 'Please enter the username' }]}
         >
-          Create Account
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[{ required: true, message: 'Please enter the password' }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          name="role"
+          label="Role"
+          rules={[{ required: true, message: 'Please select the role' }]}
+        >
+          <Select placeholder="Select a role">
+            <Option value="admin">Admin</Option>
+            <Option value="user">User</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="name"
+          label="Name"
+          rules={[{ required: true, message: 'Please enter the name' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
+            Create Account
+          </Button>
+        </Form.Item>
+      </Form>
+
+      <AccountIn4/>
+    </>
   );
 }
 export default AccountCreationForm;
