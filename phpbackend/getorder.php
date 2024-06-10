@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ngaydat = $row['ngaydat'];
         $trangthai = $row['trangthai'];
         $pttt = $row['pttt'];
-    
+
         $orderData[] = array(
             'madonhang' => $madonhang,
             'tonggia' => $tonggia,
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'trangthai' => $trangthai,
             'pttt' => $pttt
         );
-        
+
         // Thực hiện truy vấn SQL thứ hai để lấy thông tin sản phẩm của từng đơn hàng
         $sql2 = "SELECT b.tensanpham, b.url_hinhanh, c.soluong, e.namesize,b.giasanpham
         FROM ctdon c
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         WHERE c.madonhang = $madonhang";
         $result2 = pg_query($conn, $sql2);
         $productData = array(); // Tạo mảng để lưu trữ dữ liệu sản phẩm
-    
+
         while ($row_product = pg_fetch_assoc($result2)) {
             $productData[] = array(
                 'tensanpham' => $row_product['tensanpham'],
@@ -51,11 +51,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'giasanpham' => number_format($row_product['giasanpham']) . '₫',
             );
         }
-    
+
         // Lưu thông tin sản phẩm vào mảng tương ứng với từng đơn hàng
         $orderData[count($orderData) - 1]['productInfo'] = $productData;
     }
     echo json_encode($orderData); // Trả về dữ liệu từ tất cả các đơn hàng và sản phẩm dưới dạng JSON
+
+} else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $id = $_GET['userId'];
+
+    // Sử dụng prepared statement để tránh SQL Injection
+    $sql = "SELECT b.tensanpham,b.idsanpham, b.url_hinhanh, c.soluong, e.namesize, b.giasanpham, f.id_thongtinkh, f.trangthai
+            FROM ctdon c
+            INNER JOIN donhang f ON f.madonhang = c.madonhang
+            INNER JOIN thongtinkh z ON z.id_thongtinkh = f.id_thongtinkh
+            INNER JOIN sanpham b ON b.idsanpham = c.masanpham
+            INNER JOIN size e ON c.idsize = e.id
+            WHERE z.makhachhang = $1 AND f.trangthai = 'Đã hoàn thành'"; // Thêm điều kiện trạng thái
+
+    $result = pg_query_params($conn, $sql, array($id));
+
+    if (!$result) {
+        echo json_encode(array("error" => "Lỗi truy vấn cơ sở dữ liệu."));
+    } else {
+        $data = array();
+        while ($row = pg_fetch_assoc($result)) {
+            $data[] = $row;
+        }
+        echo json_encode($data);
+    }
 
 }
 ?>

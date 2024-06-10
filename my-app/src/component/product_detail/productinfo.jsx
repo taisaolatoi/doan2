@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { RightOutlined, CheckCircleOutlined,InboxOutlined } from "@ant-design/icons";
+import { RightOutlined, CheckCircleOutlined, InboxOutlined } from "@ant-design/icons";
 import { Col, Row } from 'antd'
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
+import { message } from "antd";
 import Comment
- from "../comment/comment";
+    from "../comment/comment";
 const ProductInfo = ({ product }) => {
     const [name] = useState(product[0].tensanpham);
     const [price] = useState(product[0].giasanpham);
@@ -44,17 +45,17 @@ const ProductInfo = ({ product }) => {
             if (selectedSize) {
                 setShowModal(true); // Hiển thị modal khi thêm vào giỏ hàng thành công
             } else {
-                toast.error('Chọn Size!!', {
-                    position: 'top-left',
-                    autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
-                });
+                const hide = message.error('Chọn Size!!');
+                setTimeout(() => {
+                    hide();
+                }, 2000);
             }
 
         } else {
-            toast.error('Cần đăng nhập để mua hàng!!', {
-                position: 'top-left',
-                autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
-            });
+            const hide = message.error('Cần đăng nhập để mua hàng!!');
+            setTimeout(() => {
+                hide();
+            }, 2000);
             setShowModal(false);
         }
     };
@@ -71,10 +72,10 @@ const ProductInfo = ({ product }) => {
     useEffect(() => {
         product.forEach((size, index) => {
             if (outOfStockMessage && size.namesize === selectedSize && size.soluong < quantity + 1) {
-                toast.error(outOfStockMessage, {
-                    position: 'top-left',
-                    autoClose: 3000, // Thời gian tự động đóng toast (3 giây)
-                });
+                const hide1 = message.error(outOfStockMessage);
+                setTimeout(() => {
+                    hide1();
+                }, 2000); // 2000 milliseconds = 2 giây
             }
         });
     }, [outOfStockMessage, selectedSize, quantity, product]);
@@ -98,7 +99,7 @@ const ProductInfo = ({ product }) => {
         const selectedSizeData = product.find((size) => size.namesize === selectedSize);
 
         if (selectedSizeData && selectedSizeData.soluong < quantity + 1) {
-            setOutOfStockMessage('Hết Hàng');
+            setOutOfStockMessage(`Hết Hàng trong giỏ hàng chỉ còn ${selectedSizeData.soluong}`);
         } else {
             setOutOfStockMessage('');
             setQuantity(quantity + 1);
@@ -185,6 +186,14 @@ const ProductInfo = ({ product }) => {
         e.preventDefault();
     }
 
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const inputs = document.querySelectorAll('input[type="radio"]'); // Chọn tất cả các input có type là radio
+
+    //     inputs.forEach(input => {
+    //         input.removeAttribute('disabled'); // Xóa thuộc tính disabled khỏi mỗi input
+    //         input.removeAttribute('class'); // Xóa thuộc tính class khỏi mỗi input
+    //     });
+    // });
 
     return (
         <>
@@ -205,7 +214,7 @@ const ProductInfo = ({ product }) => {
 
                         <RightOutlined />
 
-                        <li><p>{product[0].tensanpham}</p></li>
+                        <li style={{ color: '#e95221' }}><p>{product[0].tensanpham}</p></li>
                     </ul>
                 </div>
             </div>

@@ -17,7 +17,7 @@ const Subnav = () => {
         console.error(error);
       });
   }, []);
-  console.log(data);
+
   return (
     <div className="subnav-hide">
       <div className="subnav-product" style={{ display: 'flex', flexWrap: 'wrap' }}>

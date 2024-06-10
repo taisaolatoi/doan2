@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { RightOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { Row, Col } from 'antd';
+import { Row, Col,message } from 'antd';
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -84,11 +84,8 @@ const Cart = () => {
                                                 setQuantities(updatedQuantities);
                                                 updateCartQuantity(productIndex, currentQuantity + 1); // Gửi yêu cầu cập nhật số lượng mới trong bảng cart
                                             } else {
-                                                const message = `Số lượng trong giỏ hàng chỉ còn ${currentQuantity}`;
-                                                toast.warning(message, {
-                                                    position: 'top-center',
-                                                    autoClose: 3000,
-                                                });
+                                                const message1 = `Số lượng trong giỏ hàng chỉ còn ${currentQuantity}`;
+                                                message.error(message1);
                                             }
                                         };
 

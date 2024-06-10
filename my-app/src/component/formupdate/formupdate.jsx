@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { message } from 'antd';
 
 const Formupdate = () => {
   const [curdata, setCurdata] = useState({});
@@ -61,21 +62,20 @@ const Formupdate = () => {
       .then(response => response.json())
       .then(result => {
         if (result.success) {
-          toast.success(result.message, {
-            position: 'top-left',
-            autoClose: 2000,
-            onClose: () => {
-              setCurdata({
-                ...curdata,
-                email,
-                fullName,
-                phoneNumber,
-                gender,
-                birthdate,
-              });
-              window.location.reload();
-            }
-          });
+          message.success(result.message);
+
+          // Sử dụng setTimeout để thực hiện hành động sau khi thông báo được hiển thị trong một khoảng thời gian nhất định
+          setTimeout(() => {
+            setCurdata({
+              ...curdata,
+              email,
+              fullName,
+              phoneNumber,
+              gender,
+              birthdate,
+            });
+            window.location.reload();
+          }, 2000);
 
         } else {
           toast.error(result.message, {
@@ -115,7 +115,7 @@ const Formupdate = () => {
             }}
             placeholder='Nhập số điện thoại của bạn (*)'
           />
-          
+
           <label htmlFor="gender">Giới tính:</label>
           <select style={{ padding: '5px', borderColor: '#ccc' }} name="gender" value={gender || ''} onChange={(e) => setGender(e.target.value)}>
             <option value="">Chọn giới tính</option>

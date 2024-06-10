@@ -8,12 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         donhang.ngaydat,
         donhang.tonggia,
         donhang.pttt,
-        donhang.trangthai,
-		ctdon.idsize
+        donhang.trangthai
     FROM donhang
     JOIN thongtinkh
 	ON donhang.id_thongtinkh = thongtinkh.id_thongtinkh
-	JOIN ctdon on ctdon.madonhang = donhang.madonhang
 	order by donhang.madonhang;";
 
     $result = pg_query($conn, $query);

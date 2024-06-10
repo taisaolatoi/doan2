@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductInfo from './productinfo'
 import Comment from "../comment/comment";
+import Review from "../review/review";
+
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState();
@@ -24,6 +26,7 @@ const ProductDetail = () => {
     return (
       <>
         {product && <ProductInfo product={product} />}
+        {product && <Review product={product} />}
         {product && <Comment product={product} />}
       </>
     );

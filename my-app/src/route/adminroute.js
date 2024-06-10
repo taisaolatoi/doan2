@@ -9,6 +9,7 @@ import UpdateProductForm from '../component/adminpage/admin_add/UpdateProductFor
 import ProductInformation from '../component/adminpage/admin_add/ProductInformation';
 import Brands from '../component/adminpage/admin_add/add_brands';
 import AccountIn4 from '../component/adminpage/admin_add/accountin4';
+import Comment from '../component/adminpage/comment/comment';
 
 const Adminroute = () => {
     return (
@@ -21,10 +22,12 @@ const Adminroute = () => {
                     <Route path="/createaccount" element={<AccountCreationForm />} />
                     {/* <Route path="/account_info" element={<AccountIn4 />} /> */}
                     <Route path="/update-product/:id" element={<UpdateProductForm />} />
-                    <Route path="/addproduct" element={< AddProductForm/>} />
+                    <Route path="/addproduct" element={< AddProductForm />} />
                     <Route path="/order-details/:id" element={<OrderDetails />} />
-                    <Route path="/UIproduct" element={< ProductInformation/>} />
-                    <Route path="/brands" element={< Brands/>} />
+                    <Route path="/UIproduct" element={< ProductInformation />} />
+                    <Route path="/brands" element={< Brands />} />
+                    <Route path="/comment" element={< Comment />} />
+
 
 
                 </Routes>

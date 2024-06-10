@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { message } from 'antd';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -119,12 +120,8 @@ const Checkout = () => {
         .then(response => response.json())
         .then(result => {
           if (result.success) {
-            toast.success('Đặt hàng thành công!!', {
-              position: 'top-center',
-              autoClose: 2000,
-              onClose: () => {
+            message.success('Đặt hàng thành công!!', () => {
                 navigate('/');
-              },
             });
           } else {
             // Xử lý trường hợp truy vấn không thành công

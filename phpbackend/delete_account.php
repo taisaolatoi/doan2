@@ -8,6 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id'];
 
     // Sử dụng Prepared Statement và parameterized query
+    $sql0 = "DELETE from thongtinkh where makhachhang = $id";
+    $result0 = pg_query($conn,$sql0);
+
+    $sql1 = "DELETE from comment where idnguoidung = $id";
+    $result1 = pg_query($conn,$sql1);
+
     $sql = "DELETE FROM account WHERE id = $1";
     $params = array($id);
 

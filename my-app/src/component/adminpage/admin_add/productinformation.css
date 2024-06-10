@@ -1,67 +1,84 @@
 .product-table-container {
-    padding: 0 20px;
-  }
-  
-  .product-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .product-table th,
-  .product-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .product-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    color: #333;
-    text-transform: uppercase;
-  }
-  
-  .product-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 5px;
-  }
-  
-  .product-name {
-    color: #333;
-  }
-  
-  .actions {
-    display: flex;
-    align-items: center;
-  }
-  
-  .edit-icon,
-  .delete-icon {
-    margin-right: 5px;
-    color: #999;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .edit-icon:hover,
-  .delete-icon:hover {
-    color: #555;
-  }
-  
-  .product-details {
-    display: flex;
-    align-items: center;
-  }
-  
-  .product-description {
-    color: #777;
-    font-size: 14px;
-    margin-top: 5px;
-  }
-  
-  .product-price {
-    font-weight: bold;
-    color: #333;
-  }
+  padding: 0 20px;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table th,
+.product-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.product-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.product-name {
+  color: #333;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.edit-icon,
+.delete-icon {
+  margin-right: 5px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.edit-icon:hover,
+.delete-icon:hover {
+  color: #555;
+}
+
+.product-details {
+  display: flex;
+  align-items: center;
+}
+
+.product-description {
+  color: #777;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.product-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-select {
+  margin-right: 10px;
+}
+
+.filter-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.filter-button:hover {
+  background-color: #45a049;
+}

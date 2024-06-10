@@ -59,9 +59,8 @@ const Login = () => {
                         window.location.reload();
                     }
                 } else {
-                    toast.error(responseData.message, {
-                        position: 'top-left'
-                      });
+                    message.error(responseData.message)
+  
                 }
             })
             .catch(error => {

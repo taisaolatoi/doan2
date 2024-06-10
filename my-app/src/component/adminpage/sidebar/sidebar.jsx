@@ -10,6 +10,7 @@ import {
   FolderOutlined,
   TagOutlined,
   UserOutlined,
+  MessageOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
@@ -42,6 +43,14 @@ const items: MenuItem[] = [
     label: 'Quản lí đơn hàng',
     children: [
       { key: '3.1', label: 'Danh sách đơn hàng', icon: <FolderOutlined />, path: '/admin/orders' },
+    ],
+  },
+  {
+    key: '4',
+    icon: <MessageOutlined />,
+    label: 'Quản lí bình luận',
+    children: [
+      { key: '4.1', label: 'Danh sách bình luận', icon: <FolderOutlined />, path: '/admin/comment' },
     ],
   },
 ];

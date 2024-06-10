@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { message } from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Formchangepass = () => {
@@ -39,31 +40,19 @@ const Formchangepass = () => {
       const result = await response.json();
 
       if (result.success) {
-        toast.success(
-          <>
-            Đổi mật khẩu thành công!
-            <br />
-            Đang chuyển hướng về trang Login...
-          </>
-          , {
-            position: 'top-left',
-            autoClose: 3000, // thời gian hiển thị toast là 5000ms (5 giây)
-            onClose: () => {
-              localStorage.removeItem('client');
-              navigate('/login');
-            }
-          });
+        message.success('Đổi mật khẩu thành công đang chuyển hướng về trang Login..', () => {
+
+          localStorage.removeItem('client');
+          navigate('/login');
+        });
       } else {
-        toast.error(result.message, {
+        message.error(result.message, {
           position: 'top-left'
         });
       }
 
     } catch (error) {
-      toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau.', {
-        position: 'top-left'
-      });
-      console.error(error);
+      message.error('Đã xảy ra lỗi. Vui lòng thử lại sau.');
     }
   };
 
